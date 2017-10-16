@@ -60,35 +60,48 @@
                                                             <th>Специальность</th>
                                                             <th>Группа</th>
                                                             <th>Средний балл</th>
+                                                            <th>Действие</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                         <tr>
                                                             <td>Андрей</td>
                                                             <td>Даниленко</td>
-                                                            </td>
                                                             <td>ФКП</td>
                                                             <td>ПМС</td>
                                                             <td>513803</td>
                                                             <td>-4</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Снять
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Костя</td>
                                                             <td>Новичук</td>
-                                                            </td>
                                                             <td>ФКП</td>
                                                             <td>ПМС</td>
                                                             <td>513803</td>
                                                             <td>-3</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Снять
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Евгений</td>
                                                             <td>Шнейдеров</td>
-                                                            </td>
                                                             <td>ФКП</td>
                                                             <td>ИСИТ(БМ)</td>
                                                             <td>514301</td>
                                                             <td>9.5</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Снять
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                         </tbody>
                                                         <tfoot>
@@ -99,6 +112,7 @@
                                                             <th>Специальность</th>
                                                             <th>Группа</th>
                                                             <th>Средний балл</th>
+                                                            <th>Действие</th>
                                                         </tr>
                                                         </tfoot>
                                                     </table>
@@ -144,6 +158,10 @@
                                         <input type="text" class="form-control" placeholder="Введите имя компании...">
                                     </div>
 
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn btn-primary">Создать</button>
+                                    </div>
+
                                 </form>
                             </div>
                             <!-- /.box-body -->
@@ -174,35 +192,67 @@
                                                     <th>Специальность</th>
                                                     <th>Группа</th>
                                                     <th>Средний балл</th>
+                                                    <th>Назначение</th>
+                                                    <th>Редактирование</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
                                                     <td>Андрей</td>
                                                     <td>Даниленко</td>
-                                                    </td>
                                                     <td>ФКП</td>
                                                     <td>ПМС</td>
                                                     <td>513803</td>
                                                     <td>-4</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-default"
+                                                                data-toggle="modal" data-target="#modal-default">
+                                                            Назначить
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-block btn-primary">
+                                                            Редактировать
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Костя</td>
                                                     <td>Новичук</td>
-                                                    </td>
                                                     <td>ФКП</td>
                                                     <td>ПМС</td>
                                                     <td>513803</td>
                                                     <td>-3</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-default"
+                                                                data-toggle="modal" data-target="#modal-default">
+                                                            Назначить
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-block btn-primary">
+                                                            Редактировать
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Евгений</td>
                                                     <td>Шнейдеров</td>
-                                                    </td>
                                                     <td>ФКП</td>
                                                     <td>ИСИТ(БМ)</td>
                                                     <td>514301</td>
                                                     <td>9.5</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-default"
+                                                                data-toggle="modal" data-target="#modal-default">
+                                                            Назначить
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-block btn-primary">
+                                                            Редактировать
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                                 <tfoot>
@@ -213,6 +263,8 @@
                                                     <th>Специальность</th>
                                                     <th>Группа</th>
                                                     <th>Средний балл</th>
+                                                    <th>Назначение</th>
+                                                    <th>Редактирование</th>
                                                 </tr>
                                                 </tfoot>
                                             </table>
@@ -235,6 +287,37 @@
     <!-- /.nav-tabs-custom -->
     <!-- /.col -->
     <!-- /.row -->
+    <div class="modal fade" id="modal-default" data-vivaldi-spatnav-clickable="1" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Назначение на практику</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="practice">Доступные практики</label>
+                                <select id="practice" class="form-control">
+                                    <option>Java EE Development</option>
+                                    <option>Android Development</option>
+                                    <option>DevOps</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Назначить</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 
 </section>
 <jsp:include page="/jsp/blocks/scripts.jsp"/>
