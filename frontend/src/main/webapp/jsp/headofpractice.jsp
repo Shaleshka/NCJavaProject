@@ -42,7 +42,7 @@
                         </li>
                     </ul>
 
-                    <a href="#" class="btn btn-primary btn-block"><b>Выйти</b></a>
+                    <a href="/logout" class="btn btn-primary btn-block"><b>Выйти</b></a>
                 </div>
                 <!-- /.box-body -->
             </div>

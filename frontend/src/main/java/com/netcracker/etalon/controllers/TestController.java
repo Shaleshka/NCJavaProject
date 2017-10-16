@@ -42,7 +42,24 @@ public class TestController {
     public String login(
             @RequestParam("email") String email,
             @RequestParam("password") String pass) {
-        return "headofpractice";
+        String result = "login";
+        switch (email) {
+            case "student@gmail.com":
+                result = "student";
+                break;
+            case "hop@gmail.com":
+                result = "headofpractice";
+                break;
+            case "admin@gmail.com":
+                result = "admin";
+                break;
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout() {
+        return "login";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)

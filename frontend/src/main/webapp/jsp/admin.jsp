@@ -26,6 +26,11 @@
                     <li><a href="#new_hop" data-toggle="tab">Создать нового рук. практики</a></li>
                     <li><a href="#students" data-toggle="tab">Студенты</a></li>
                     <li><a href="#faculties" data-toggle="tab">Факультеты и специальности</a></li>
+                    <li>
+                        <div class="pull-right">
+                            <a href="/logout" class="btn btn-primary btn-block"><b>Выйти</b></a>
+                        </div>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">

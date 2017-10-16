@@ -12,6 +12,6 @@
     <title></title>
 </head>
 <body>
-<jsp:forward page="jsp/admin.jsp"/>
+<jsp:forward page="jsp/login.jsp"/>
 </body>
 </html>
