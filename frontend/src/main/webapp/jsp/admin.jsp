@@ -25,6 +25,7 @@
                     <li class="active"><a href="#activity" data-toggle="tab">Практики</a></li>
                     <li><a href="#new_hop" data-toggle="tab">Создать нового рук. практики</a></li>
                     <li><a href="#students" data-toggle="tab">Студенты</a></li>
+                    <li><a href="#faculties" data-toggle="tab">Факультеты и специальности</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
@@ -277,6 +278,148 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="tab-pane" id="faculties">
+                        <div class="box box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Факультеты и специальности</h3>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-default"
+                                            data-toggle="modal" data-target="#new-faculty">
+                                        Создать факультет
+                                    </button>
+                                    <button type="button" class="btn btn-default"
+                                            data-toggle="modal" data-target="#new-speciality">
+                                        Создать специальность
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="box-body">
+                                        <div class="box-group">
+                                            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h3 class="box-title">Факультеты</h3>
+                                                </div>
+                                                <!-- /.box-header -->
+                                                <div class="box-body">
+                                                    <table id="tfaculty" class="table table-bordered table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Имя</th>
+                                                            <th>Удаление</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>ФКП</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Удалить
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>ФКП</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Удалить
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>ФКП</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Удалить
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <th>Имя</th>
+                                                            <th>Удаление</th>
+                                                        </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                                <!-- /.box-body -->
+                                            </div>
+                                            <!-- /.box -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="box-body">
+                                        <div class="box-group">
+                                            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                                            <div class="box">
+                                                <div class="box-header">
+                                                    <h3 class="box-title">Специальности</h3>
+                                                </div>
+                                                <!-- /.box-header -->
+                                                <div class="box-body">
+                                                    <table id="tgroups" class="table table-bordered table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Имя</th>
+                                                            <th>Факультет</th>
+                                                            <th>Удаление</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>ПМС</td>
+                                                            <td>ФКП</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Удалить
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>ПМС</td>
+                                                            <td>ФКП</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Удалить
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>ПМС</td>
+                                                            <td>ФКП</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-block btn-danger">
+                                                                    Удалить
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <th>Имя</th>
+                                                            <th>Факультет</th>
+                                                            <th>Удаление</th>
+                                                        </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                                <!-- /.box-body -->
+                                            </div>
+                                            <!-- /.box -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- /.box-body -->
                 </div>
             </div>
@@ -312,6 +455,68 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Назначить</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="new-faculty" data-vivaldi-spatnav-clickable="1" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Новый факультет</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label>Имя</label>
+                                <input type="text" class="form-control" placeholder="Введите имя факультета...">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Создать</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="new-speciality" data-vivaldi-spatnav-clickable="1" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Новая специальность</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label>Имя</label>
+                                <input type="text" class="form-control" placeholder="Введите имя специальности...">
+                            </div>
+                            <div class="form-group">
+                                <label for="faculty">Факультет</label>
+                                <select id="faculty" class="form-control">
+                                    <option>ФКП</option>
+                                    <option>КСИС</option>
+                                    <option>ФРЭ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Создать</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -366,6 +571,22 @@
             'autoWidth': false
         })
         $('#example2').DataTable({
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        })
+        $('#tfaculty').DataTable({
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        })
+        $('#tgroups').DataTable({
             'paging': true,
             'lengthChange': false,
             'searching': true,
