@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page session="true" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,10 +24,17 @@
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Войдите, чтобы начать</p>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger alert-dismissible">${error}</div>
+        </c:if>
+        <c:if test="${not empty msg}">
+            <div class="alert alert-info alert-dismissible">${msg}</div>
+        </c:if>
 
-        <form action="/login" method="post">
+        <form action="<c:url value='/login'/>" method="post">
             <div class="form-group has-feedback">
-                <input type="email" class="form-control" aria-describedby="emailHelp" name="email" placeholder="Email">
+                <input type="email" class="form-control" aria-describedby="emailHelp" name="username"
+                       placeholder="Email">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
@@ -44,6 +53,8 @@
                 <div class="col-xs-4">
                     <button type="submit" class="btn btn-primary btn-block btn-flat">Войти</button>
                 </div>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <!-- /.col -->
             </div>
         </form>

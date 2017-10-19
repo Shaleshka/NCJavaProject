@@ -49,15 +49,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User update(User user) throws Exception {
-        User updatedUser = userRepository.findOne((int) user.getId());
-
-        if (updatedUser == null)
-            throw new Exception("Not found");
-
-        updatedUser.setEmail(user.getEmail());
-        updatedUser.setPassword(user.getPassword());
-        updatedUser.setRole(user.getRole());
-        return updatedUser;
+        return null;
     }
 
     @Override

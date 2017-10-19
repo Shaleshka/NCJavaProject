@@ -13,29 +13,16 @@ import javax.persistence.Table;
 public class User {
 
     @Id
-    @GeneratedValue
-    private long id;
-
-    private String email;
+    private String username;
 
     private String password;
 
-    private int role;
-
-    public long getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -46,13 +33,15 @@ public class User {
         this.password = password;
     }
 
-    public int getRole() {
-        return role;
+    public int getEnabled() {
+        return enabled;
     }
 
-    public void setRole(int role) {
-        this.role = role;
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
+
+    private int enabled;
 
     @Override
     public boolean equals(Object o) {
@@ -60,25 +49,11 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
 
         User user = (User) o;
-        return email.equals(user.email);
+        return username != null ? username.equals(user.username) : user.username == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + email.hashCode();
-        return result;
+        return username != null ? username.hashCode() : 0;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
-    }
-
-
 }

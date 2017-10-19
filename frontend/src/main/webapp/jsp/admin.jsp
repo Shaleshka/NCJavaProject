@@ -6,6 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="sec"
+          uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -28,7 +31,7 @@
                     <li><a href="#faculties" data-toggle="tab">Факультеты и специальности</a></li>
                     <li>
                         <div class="pull-right">
-                            <a href="/logout" class="btn btn-primary btn-block"><b>Выйти</b></a>
+                            <a href="<c:url value="/logout" />" class="btn btn-primary btn-block"><b>Выйти</b></a>
                         </div>
                     </li>
                 </ul>
