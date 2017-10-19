@@ -21,8 +21,12 @@
  * United States of America
  * All rights reserved.
  */
-package com.netcracker.etalon.controllers;
+package com.netcracker.devschool.dev4.studdist.controller;
 
+import com.netcracker.devschool.dev4.studdist.entity.User;
+import com.netcracker.devschool.dev4.studdist.repository.UserRepository;
+import com.netcracker.devschool.dev4.studdist.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +40,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class TestController {
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     //@ResponseBody
@@ -55,6 +62,19 @@ public class TestController {
                 break;
         }
         return result;
+    }
+
+    @RequestMapping(value = "/adduser", method = RequestMethod.GET)
+    @ResponseBody
+    public String addUser(@RequestParam("email") String email,
+                          @RequestParam("password") String pass,
+                          @RequestParam("role") int role
+    ) {
+        User user = new User();
+        user.setRole(role);
+        user.setPassword(pass);
+        user.setEmail(email);
+        return userService.create(user).toString();
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

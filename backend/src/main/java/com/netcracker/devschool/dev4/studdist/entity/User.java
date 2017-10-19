@@ -1,16 +1,25 @@
 package com.netcracker.devschool.dev4.studdist.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by Shaleshka on 16.10.17.
  */
 @Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue
     private long id;
+
     private String email;
+
     private String password;
+
     private int role;
 
     public long getId() {

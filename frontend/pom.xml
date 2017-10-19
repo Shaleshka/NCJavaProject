@@ -6,10 +6,18 @@
     <packaging>war</packaging>
 
     <parent>
-        <artifactId>etalon2017</artifactId>
+        <artifactId>studdist</artifactId>
         <groupId>com.netcracker.devschool.dev4</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.netcracker.devschool.dev4</groupId>
+            <artifactId>backend</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
     <artifactId>frontend</artifactId>
 
