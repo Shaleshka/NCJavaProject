@@ -9,12 +9,12 @@
 </head>
 <body>
 <div class="error-page">
-    <h2 class="headline text-red"> 403</h2>
+    <h2 class="headline text-yellow"> 404</h2>
 
     <div class="error-content" style="padding-top: 20px">
-        <h3><i class="fa fa-warning text-red"></i> Ошибка! Доступ запрещён</h3>
+        <h3><i class="fa fa-warning text-yellow"></i> Ошибка! Такой страницы нет</h3>
         <p>
-            К сожалению, у Вас нет доступа к этой странице
+            К сожалению, такой страницы не найдено
         </p>
 
     </div>

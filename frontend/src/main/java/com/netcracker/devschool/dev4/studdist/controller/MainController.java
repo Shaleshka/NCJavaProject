@@ -23,22 +23,17 @@
  */
 package com.netcracker.devschool.dev4.studdist.controller;
 
-import com.netcracker.devschool.dev4.studdist.entity.User;
-import com.netcracker.devschool.dev4.studdist.repository.UserRepository;
 import com.netcracker.devschool.dev4.studdist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -123,19 +118,9 @@ public class MainController {
 
     //for 403 access denied page
     @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public ModelAndView accesssDenied() {
+    public String accesssDenied() {
 
-        ModelAndView model = new ModelAndView();
-
-        //check if user is login
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetail = (UserDetails) auth.getPrincipal();
-            model.addObject("username", userDetail.getUsername());
-        }
-
-        model.setViewName("403");
-        return model;
+        return "403";
 
     }
 
@@ -146,6 +131,30 @@ public class MainController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+    }
+
+    @RequestMapping(value = "errors", method = RequestMethod.GET)
+    public String renderErrorPage(HttpServletRequest httpRequest) {
+
+        String error = "";
+        int httpErrorCode = getErrorCode(httpRequest);
+
+        switch (httpErrorCode) {
+            case 404: {
+                error = "404";
+                break;
+            }
+            case 500: {
+                error = "500";
+                break;
+            }
+        }
+        return error;
+    }
+
+    private int getErrorCode(HttpServletRequest httpRequest) {
+        return (Integer) httpRequest
+                .getAttribute("javax.servlet.error.status_code");
     }
 }
 /*
