@@ -23,6 +23,14 @@
                 dataType: "json",
                 headers: {"${_csrf.parameterName}": "${_csrf.token}"},
                 success: function (data) {
+                    $('#user_avatar').attr("src", "resources/img/avatars/" + data.imageUrl);
+                    $('#user_name').html(data.fname + " " + data.lname);
+                    //that's a trick to avoid requests to a faculty table for a name (that'll mean either additional
+                    // request from here, or returing something else than student from controller)
+                    // we will do such request to fill our select below
+                    //(not implemented yet)
+                    $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
+                    $('#group').text(data.group);
                 }
             });
         });
@@ -38,21 +46,22 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                        <img class="profile-user-img img-responsive img-circle" src="${imageUrl}"
+                    <img class="profile-user-img img-responsive img-circle" id="user_avatar" src="${imageUrl}"
                          alt="User profile picture">
-                        <h3 class="profile-username text-center">${name}</h3>
-
+                    <h3 class="profile-username text-center" id="user_name">${name}</h3>
+                    <!-- User role never changes (at least for now) -->
                     <p class="text-muted text-center">Студент</p>
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
+                            <!-- This also never changes for now -->
                             <b>Университет</b> <a class="pull-right">БГУИР</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Факультет</b> <a class="pull-right">ФКП</a>
+                            <b>Факультет</b> <a class="pull-right" id="faculty">ФКП</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Группа</b> <a class="pull-right">513803</a>
+                            <b>Группа</b> <a class="pull-right" id="group">513803</a>
                         </li>
                     </ul>
 
@@ -99,7 +108,7 @@
 
                                     <div class="form-group">
                                         <label>Выберите факультет</label>
-                                        <select name="faculty" class="form-control">
+                                        <select id="faculties" name="faculty" class="form-control">
                                             <option value="1">ФКП</option>
                                             <option value="2">ФИТУ</option>
                                             <option value="3">ФРЭ</option>
