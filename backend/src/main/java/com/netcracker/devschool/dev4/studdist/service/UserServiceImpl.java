@@ -1,15 +1,13 @@
 package com.netcracker.devschool.dev4.studdist.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.omg.CosNaming.NamingContextPackage.NotFound;
+import com.netcracker.devschool.dev4.studdist.entity.User;
+import com.netcracker.devschool.dev4.studdist.repository.UserRepository;
+import com.netcracker.devschool.dev4.studdist.repository.UserRolesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.netcracker.devschool.dev4.studdist.entity.User;
-import com.netcracker.devschool.dev4.studdist.repository.UserRepository;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by Shaleshka on 19.10.17.
@@ -19,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserRepository userRepository;
+
+    @Resource
+    private UserRolesRepository userRolesRepository;
 
 
     @Override
@@ -56,5 +57,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findById(long id) {
         return userRepository.findOne((int) id);
+    }
+
+    @Override
+    public int getIdByName(String name) {
+        return userRolesRepository.findByName(name).getUser_role_id();
     }
 }

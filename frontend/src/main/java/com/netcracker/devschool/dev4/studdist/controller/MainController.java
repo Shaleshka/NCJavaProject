@@ -23,6 +23,8 @@
  */
 package com.netcracker.devschool.dev4.studdist.controller;
 
+import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,6 +52,9 @@ public class MainController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private StudentService studentService;
+
     @RequestMapping(value = {"/", "/welcome**"}, method = RequestMethod.GET)
     public ModelAndView defaultPage() {
 
@@ -70,6 +75,7 @@ public class MainController {
 
     /* The user is logged in :) */
             String role = auth.getAuthorities().toString();
+
 
             String targetUrl = "";
             if (role.contains("STUDENT")) {
@@ -100,14 +106,34 @@ public class MainController {
 
     @RequestMapping(value = "/student", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_STUDENT')")
-    public String pageStudent() {
-        return "student";
+    public ModelAndView pageStudent() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        ModelAndView model = new ModelAndView();
+        String name = auth.getName();
+        int id = userService.getIdByName(name);
+        Student student = studentService.findById(id);
+        if (student != null) {
+            model.addObject("name", student.getFname() + " " + student.getLname());
+            model.addObject("imageUrl", "resources/img/avatars/" + student.getImageUrl());
+        }
+        model.setViewName("student");
+        return model;
     }
 
     @RequestMapping(value = "/hop", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_HOP')")
-    public String pageHop() {
-        return "headofpractice";
+    public ModelAndView pageHop() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        ModelAndView model = new ModelAndView();
+        String name = auth.getName();
+        int id = userService.getIdByName(name);
+        /*Student student = studentService.findById(id);
+        if (student!=null) {
+            model.addObject("name",student.getFname()+" "+student.getLname());
+            model.addObject("imageUrl","resources/img/avatars/"+student.getImageUrl());
+        }*/
+        model.setViewName("headofpractice");
+        return model;
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)

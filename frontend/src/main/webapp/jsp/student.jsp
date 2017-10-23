@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page session="true" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -23,10 +25,13 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg"
+                    <c:if test="${not empty imageUrl}">
+                        <img class="profile-user-img img-responsive img-circle" src="${imageUrl}"
                          alt="User profile picture">
-
-                    <h3 class="profile-username text-center">Богдан Шелешко</h3>
+                    </c:if>
+                    <c:if test="${not empty imageUrl}">
+                        <h3 class="profile-username text-center">${name}</h3>
+                    </c:if>
 
                     <p class="text-muted text-center">Студент</p>
 
