@@ -21,20 +21,20 @@ public class StudentsController {
 
     @RequestMapping(value = "/edit/{studentId}", method = RequestMethod.POST)
     @ResponseBody
-    public String[] editStudent(@PathVariable String studentId,
-                                @RequestParam(value = "fname", required = false) String fname,
-                                @RequestParam(value = "lname", required = false) String lname,
-                                @RequestParam(value = "image", required = false) MultipartFile image,
-                                @RequestParam(value = "faculty", required = false) String faculty,
-                                @RequestParam(value = "speciality", required = false) String speciality,
-                                @RequestParam(value = "group", required = false) String group,
-                                @RequestParam(value = "isBudget", required = false) String isBudget,
-                                @RequestParam(value = "avgScore", required = false) String avgScore
+    public Student editStudent(@PathVariable String studentId,
+                               @RequestParam(value = "fname", required = false) String fname,
+                               @RequestParam(value = "lname", required = false) String lname,
+                               @RequestParam(value = "image", required = false) MultipartFile image,
+                               @RequestParam(value = "faculty", required = false) String faculty,
+                               @RequestParam(value = "speciality", required = false) String speciality,
+                               @RequestParam(value = "group", required = false) String group,
+                               @RequestParam(value = "isBudget", required = false) String isBudget,
+                               @RequestParam(value = "avgScore", required = false) String avgScore
     ) {
         String msg = "";
         String type = "success";
+        Student student = studentService.findById(Integer.parseInt(studentId));
         try {
-            Student student = studentService.findById(Integer.parseInt(studentId));
             if (!Objects.equals(fname, "")) student.setFname(fname);
             if (!Objects.equals(lname, "")) student.setLname(lname);
             //TODO: upload file
@@ -51,7 +51,7 @@ public class StudentsController {
             msg = "Ошибка!";
             type = "error";
         }
-        return new String[]{type, msg};
+        return student;
     }
 
 }

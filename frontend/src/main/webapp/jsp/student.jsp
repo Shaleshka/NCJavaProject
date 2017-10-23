@@ -19,8 +19,11 @@
     <script>
         $(function () {
             // bind 'myForm' and provide a simple callback function
-            $('#student_edit').ajaxForm(function () {
-
+            $('#student_edit').ajaxForm({
+                dataType: "json",
+                headers: {"${_csrf.parameterName}": "${_csrf.token}"},
+                success: function (data) {
+                }
             });
         });
     </script>
