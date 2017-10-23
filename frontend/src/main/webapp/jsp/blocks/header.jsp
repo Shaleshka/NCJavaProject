@@ -27,3 +27,13 @@
 <!-- Google Font -->
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<link rel="icon" href="resources/img/favicon.ico">
+
+<!-- jQuery 3 -->
+<script src="resources/js/libs/jquery.min.js"></script>
+<script src="resources/js/libs/popper.js"></script>
+<script src="resources/js/libs/jquery.form.min.js"></script>
+<!-- InputMask -->
+<script src="resources/js/libs/jquery.inputmask.js"></script>
+<script src="resources/js/libs/jquery.inputmask.date.extensions.js"></script>
+<script src="resources/js/libs/jquery.inputmask.extensions.js"></script>

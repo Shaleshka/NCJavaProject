@@ -23,7 +23,9 @@
  */
 package com.netcracker.devschool.dev4.studdist.controller;
 
+import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.service.HeadOfPracticeService;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,9 @@ public class MainController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private HeadOfPracticeService headOfPracticeService;
 
     @RequestMapping(value = {"/", "/welcome**"}, method = RequestMethod.GET)
     public ModelAndView defaultPage() {
@@ -115,6 +120,7 @@ public class MainController {
         if (student != null) {
             model.addObject("name", student.getFname() + " " + student.getLname());
             model.addObject("imageUrl", "resources/img/avatars/" + student.getImageUrl());
+            model.addObject("id", student.getId());
         }
         model.setViewName("student");
         return model;
@@ -127,11 +133,12 @@ public class MainController {
         ModelAndView model = new ModelAndView();
         String name = auth.getName();
         int id = userService.getIdByName(name);
-        /*Student student = studentService.findById(id);
-        if (student!=null) {
-            model.addObject("name",student.getFname()+" "+student.getLname());
-            model.addObject("imageUrl","resources/img/avatars/"+student.getImageUrl());
-        }*/
+        HeadOfPractice headOfPractice = headOfPracticeService.findById(id);
+        if (headOfPractice != null) {
+            model.addObject("name", headOfPractice.getFname() + " " + headOfPractice.getLname());
+            model.addObject("imageUrl", "resources/img/avatars/" + headOfPractice.getImageUrl());
+            model.addObject("company", headOfPractice.getCompanyName());
+        }
         model.setViewName("headofpractice");
         return model;
     }

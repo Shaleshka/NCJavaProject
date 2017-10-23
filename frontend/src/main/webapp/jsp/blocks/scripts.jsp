@@ -7,18 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<!-- jQuery 3 -->
-<script src="resources/js/libs/jquery.min.js"></script>
-<script src="resources/js/libs/popper.js"></script>
+
 <!-- Bootstrap 3.3.7 -->
 <script src="resources/js/libs/bootstrap.min.js"></script>
 <!-- iCheck -->
 <script src="resources/js/libs/icheck.min.js"></script>
-
-<!-- InputMask -->
-<script src="resources/js/libs/jquery.inputmask.js"></script>
-<script src="resources/js/libs/jquery.inputmask.date.extensions.js"></script>
-<script src="resources/js/libs/jquery.inputmask.extensions.js"></script>
 <!-- date-range-picker -->
 <script src="resources/js/libs/moment.min.js"></script>
 <script src="resources/js/libs/daterangepicker.js"></script>

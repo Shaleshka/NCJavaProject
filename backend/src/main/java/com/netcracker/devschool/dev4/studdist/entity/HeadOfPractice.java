@@ -15,6 +15,15 @@ public class HeadOfPractice {
     private String fname;
     private String lname;
     private String companyName;
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     @Override
     public boolean equals(Object o) {

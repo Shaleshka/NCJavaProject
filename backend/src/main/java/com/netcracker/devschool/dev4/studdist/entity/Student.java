@@ -1,5 +1,6 @@
 package com.netcracker.devschool.dev4.studdist.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -17,6 +18,7 @@ public class Student {
     private String imageUrl;
     private int facultyId;
     private int specialityId;
+    @Column(name = "groupN")
     private int group;
     private double avgScore;
     private int isBudget;

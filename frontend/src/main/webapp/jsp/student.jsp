@@ -15,6 +15,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Система распределения студентов | Профиль</title>
     <jsp:include page="/jsp/blocks/header.jsp"/>
+
+    <script>
+        $(function () {
+            // bind 'myForm' and provide a simple callback function
+            $('#student_edit').ajaxForm(function () {
+
+            });
+        });
+    </script>
+
 </head>
 <body class="hold-transition login-page">
 <section class="content">
@@ -25,13 +35,9 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <c:if test="${not empty imageUrl}">
                         <img class="profile-user-img img-responsive img-circle" src="${imageUrl}"
                          alt="User profile picture">
-                    </c:if>
-                    <c:if test="${not empty imageUrl}">
                         <h3 class="profile-username text-center">${name}</h3>
-                    </c:if>
 
                     <p class="text-muted text-center">Студент</p>
 
@@ -68,55 +74,68 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <form role="form">
+                                <form id="student_edit" action="/students/edit/${id}" method="post" role="form">
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Имя</label>
-                                        <input type="text" class="form-control" placeholder="Введите имя...">
+                                        <input type="text" class="form-control" name="fname"
+                                               placeholder="Введите имя...">
                                     </div>
                                     <div class="form-group">
                                         <label>Фамилия</label>
-                                        <input type="text" class="form-control" placeholder="Введите фамилию...">
+                                        <input type="text" class="form-control" name="lname"
+                                               placeholder="Введите фамилию...">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Аватарка</label>
+                                        <input type="file" name="image" id="exampleInputFile">
+
+                                        <p class="help-block">Картинка jpg, png, bmp, gif, не более 1024 кбайт</p>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Выберите факультет</label>
-                                        <select class="form-control">
-                                            <option>ФКП</option>
-                                            <option>ФИТУ</option>
-                                            <option>ФРЭ</option>
-                                            <option>ФТК</option>
-                                            <option>ФКСИС</option>
+                                        <select name="faculty" class="form-control">
+                                            <option value="1">ФКП</option>
+                                            <option value="2">ФИТУ</option>
+                                            <option value="3">ФРЭ</option>
+                                            <option value="4">ФТК</option>
+                                            <option value="5">ФКСИС</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Выберите специальность</label>
-                                        <select class="form-control">
-                                            <option>ПМС</option>
-                                            <option>ИСИТ (БМ)</option>
-                                            <option>ИПОИТ</option>
-                                            <option>МИКПРЭС</option>
-                                            <option>МЕДЭ</option>
+                                        <select name="speciality" class="form-control">
+                                            <option value="1">ФКП</option>
+                                            <option value="2">ФИТУ</option>
+                                            <option value="3">ФРЭ</option>
+                                            <option value="4">ФТК</option>
+                                            <option value="5">ФКСИС</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Группа</label>
-                                        <input type="text" class="form-control" placeholder="Введите группу...">
+                                        <input type="text" class="form-control" name="group"
+                                               placeholder="Введите группу...">
                                     </div>
 
                                     <div class="form-group">
                                         <label>
-                                            <input type="checkbox">
+                                            <input name="isBudget" type="checkbox">
                                             Бюджетник
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Средний балл</label>
-                                        <input type="text" class="form-control" placeholder="Введите ср. балл...">
+                                        <input type="text" class="form-control" name="avgScore"
+                                               placeholder="Введите ср. балл...">
                                     </div>
+                                    <input type="hidden" name="${_csrf.parameterName}"
+                                           value="${_csrf.token}"/>
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
