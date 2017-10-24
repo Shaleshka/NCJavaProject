@@ -20,8 +20,6 @@
         $(function () {
             // bind 'myForm' and provide a simple callback function
             $('#student_edit').ajaxForm({
-                dataType: "json",
-                headers: {"${_csrf.parameterName}": "${_csrf.token}"},
                 success: function (data) {
                     $('#user_avatar').attr("src", "resources/img/avatars/" + data.imageUrl);
                     $('#user_name').html(data.fname + " " + data.lname);
@@ -31,6 +29,12 @@
                     //(not implemented yet)
                     $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
                     $('#group').text(data.group);
+                }
+            });
+
+            $('#fileupload').ajaxForm({
+                success: function (data) {
+                    $('#user_avatar').attr("src", "images/" + data.imageUrl);
                 }
             });
 
@@ -105,7 +109,9 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <form id="student_edit" action="/students/edit/${id}" method="post" role="form">
+                                <form id="student_edit"
+                                      action="/students/edit/${id}?${_csrf.parameterName}=${_csrf.token}" method="post"
+                                      role="form">
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Имя</label>
@@ -119,10 +125,10 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="exampleInputFile">Аватарка</label>
-                                        <input type="file" name="image" id="exampleInputFile">
-
-                                        <p class="help-block">Картинка jpg, png, bmp, gif, не более 1024 кбайт</p>
+                                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                                data-target="#picture_upload">
+                                            Загрузка картинки
+                                        </button>
                                     </div>
 
                                     <div class="form-group">
@@ -225,6 +231,37 @@
     <!-- /.row -->
 
 </section>
+<div class="modal fade" id="picture_upload">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Загрузка картинки</h4>
+            </div>
+            <div class="modal-body">
+                <form id="fileupload" role="form"
+                      action="/students/imageUpload/${id}?${_csrf.parameterName}=${_csrf.token}" method="post"
+                      enctype="multipart/form-data">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="exampleInputFile">Загрузка файла</label>
+                            <input type="file" name="file" id="exampleInputFile">
+
+                            <p class="help-block">Картинка png, jpg, gif, bmp, не более 1мб</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Загрузить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 <jsp:include page="/jsp/blocks/scripts.jsp"/>
 </body>
 </html>

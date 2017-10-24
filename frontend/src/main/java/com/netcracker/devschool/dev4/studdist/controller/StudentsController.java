@@ -7,6 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
@@ -19,12 +23,16 @@ public class StudentsController {
     @Autowired
     private StudentService studentService;
 
+    private String UPLOADED_FOLDER = "C:/Users/Shaleshka/Desktop/NCJavaProject/images/";
+
+    //Save the uploaded file to this folder
+
+
     @RequestMapping(value = "/edit/{studentId}", method = RequestMethod.POST)
     @ResponseBody
     public Student editStudent(@PathVariable String studentId,
                                @RequestParam(value = "fname", required = false) String fname,
                                @RequestParam(value = "lname", required = false) String lname,
-                               @RequestParam(value = "image", required = false) MultipartFile image,
                                @RequestParam(value = "faculty", required = false) String faculty,
                                @RequestParam(value = "speciality", required = false) String speciality,
                                @RequestParam(value = "group", required = false) String group,
@@ -32,26 +40,50 @@ public class StudentsController {
                                @RequestParam(value = "avgScore", required = false) String avgScore
     ) {
         String msg = "";
-        String type = "success";
         Student student = studentService.findById(Integer.parseInt(studentId));
         try {
-            if (!Objects.equals(fname, "")) student.setFname(fname);
-            if (!Objects.equals(lname, "")) student.setLname(lname);
-            //TODO: upload file
-            if (!Objects.equals(faculty, "")) student.setFacultyId(Integer.parseInt(faculty));
-            if (!Objects.equals(speciality, "")) student.setSpecialityId(Integer.parseInt(speciality));
-            if (!Objects.equals(group, "")) student.setGroup(Integer.parseInt(group));
+            if (!Objects.equals(fname, "") && fname != null) student.setFname(fname);
+            if (!Objects.equals(lname, "") && lname != null) student.setLname(lname);
+            if (!Objects.equals(faculty, "") && faculty != null) student.setFacultyId(Integer.parseInt(faculty));
+            if (!Objects.equals(speciality, "") && speciality != null)
+                student.setSpecialityId(Integer.parseInt(speciality));
+            if (!Objects.equals(group, "") && group != null) student.setGroup(Integer.parseInt(group));
             if (isBudget != null) student.setIsBudget(1);
             else student.setIsBudget(0);
-            if (!Objects.equals(avgScore, "")) student.setAvgScore(Double.parseDouble(avgScore));
+            if (!Objects.equals(avgScore, "") && avgScore != null) student.setAvgScore(Double.parseDouble(avgScore));
             studentService.update(student);
-            msg = "Изменения приняты";
         } catch (Exception e) {
             e.printStackTrace();
-            msg = "Ошибка!";
-            type = "error";
+            return null;
         }
         return student;
+    }
+
+    @RequestMapping(value = "/imageUpload/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Student singleFileUpload(@PathVariable int id,
+                                    @RequestParam(value = "file", required = false) MultipartFile file) {
+        if ((file != null) && (!file.isEmpty())) {
+            try {
+
+                // Get the file and save it somewhere
+
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+                Files.write(path, bytes);
+
+                Student student = studentService.findById(id);
+                student.setImageUrl(file.getOriginalFilename());
+                studentService.update(student);
+                return student;
+
+            } catch (IOException e) {
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else return null;
     }
 
 }

@@ -123,7 +123,7 @@ public class MainController {
         Student student = studentService.findById(id);
         if (student != null) {
             model.addObject("name", student.getFname() + " " + student.getLname());
-            model.addObject("imageUrl", "resources/img/avatars/" + student.getImageUrl());
+            model.addObject("imageUrl", "images/" + student.getImageUrl());
             model.addObject("id", student.getId());
             model.addObject("faculties", facultyService.findAll());
         }
@@ -141,7 +141,7 @@ public class MainController {
         HeadOfPractice headOfPractice = headOfPracticeService.findById(id);
         if (headOfPractice != null) {
             model.addObject("name", headOfPractice.getFname() + " " + headOfPractice.getLname());
-            model.addObject("imageUrl", "resources/img/avatars/" + headOfPractice.getImageUrl());
+            model.addObject("imageUrl", "images/" + headOfPractice.getImageUrl());
             model.addObject("company", headOfPractice.getCompanyName());
         }
         model.setViewName("headofpractice");
