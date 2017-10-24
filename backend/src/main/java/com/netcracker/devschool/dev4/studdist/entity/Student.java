@@ -11,6 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "students")
 public class Student {
+
     @Id
     private int id;
     private String fname;
@@ -23,6 +24,7 @@ public class Student {
     private double avgScore;
     private int isBudget;
     private int course;
+
 
     @Override
     public boolean equals(Object o) {
