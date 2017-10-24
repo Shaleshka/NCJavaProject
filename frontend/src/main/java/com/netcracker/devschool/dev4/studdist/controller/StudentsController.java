@@ -86,4 +86,10 @@ public class StudentsController {
         } else return null;
     }
 
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Student getStudent(@PathVariable int id) {
+        return studentService.findById(id);
+    }
+
 }

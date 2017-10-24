@@ -21,14 +21,19 @@
             // bind 'myForm' and provide a simple callback function
             $('#student_edit').ajaxForm({
                 success: function (data) {
-                    $('#user_avatar').attr("src", "resources/img/avatars/" + data.imageUrl);
-                    $('#user_name').html(data.fname + " " + data.lname);
-                    //that's a trick to avoid requests to a faculty table for a name (that'll mean either additional
-                    // request from here, or returing something else than student from controller)
-                    // we will do such request to fill our select below
-                    //(not implemented yet)
-                    $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
-                    $('#group').text(data.group);
+                    if (data) {
+                        $('#user_avatar').attr("src", "images/" + data.imageUrl);
+                        $('#user_name').html(data.fname + " " + data.lname);
+                        //that's a trick to avoid requests to a faculty table for a name (that'll mean either additional
+                        // request from here, or returing something else than student from controller)
+                        // we will do such request to fill our select below
+                        //(not implemented yet)
+                        $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
+                        $('#group').text(data.group);
+                        $('#success').css('display', 'block');
+                    } else {
+                        $('#error').css('display', 'block');
+                    }
                 }
             });
 
@@ -39,11 +44,11 @@
             });
 
             $('#faculties').on('change', function () {
-                refreshSpecialities(this.value);
+                refreshSpecialities(this.value, 0);
             })
 
         });
-        function refreshSpecialities(id) {
+        function refreshSpecialities(id, val) {
             $.ajax({
                 url: 'university/getSpecialitiesByFacultyId/' + id,
                 dataType: 'json',
@@ -52,15 +57,38 @@
                     var options = "";
                     $.each(data, function (index, value) {
                         options += '<option value="' + value.id + '">' + value.name + '</option>';
-                    })
+                    });
                     $('#specs').html(options);
+                    if (val) {
+                        $('#specs').val(val);
+                    }
                 }
             });
+        }
+        function fillForm() {
+            $.ajax({
+                url: 'students/get/${id}',
+                dataType: 'json',
+                success: function (data) {
+                    $('#user_avatar').attr("src", "images/" + data.imageUrl);
+                    $('#user_name').html(data.fname + " " + data.lname);
+                    $('#faculties').val(data.facultyId);
+                    refreshSpecialities(data.facultyId, data.specialityId);
+                    $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
+                    $('#group').text(data.group);
+                    $('input[name=fname]').val(data.fname);
+                    $('input[name=lname]').val(data.lname);
+                    $('input[name=group]').val(data.group);
+                    if (data.isBudget) $('input[name=isBudget]').iCheck('toggle');
+                    $('input[name=avgScore]').val(data.avgScore);
+                }
+            })
+
         }
     </script>
 
 </head>
-<body onload="refreshSpecialities(1)" class="hold-transition login-page">
+<body onload="fillForm()" class="hold-transition login-page">
 <section class="content">
 
     <div class="row">
@@ -81,10 +109,10 @@
                             <b>Университет</b> <a class="pull-right">БГУИР</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Факультет</b> <a class="pull-right" id="faculty">ФКП</a>
+                            <b>Факультет</b> <a class="pull-right" id="faculty"></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Группа</b> <a class="pull-right" id="group">513803</a>
+                            <b>Группа</b> <a class="pull-right" id="group"></a>
                         </li>
                     </ul>
 
@@ -107,6 +135,18 @@
                             <div class="box-header with-border">
                                 <h3 class="box-title">Пожалуйста, заполните все поля</h3>
                             </div>
+
+                            <div id="success" class="alert alert-success alert-dismissible" style="display: none">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i> Изменения приняты!</h4>
+                            </div>
+
+                            <div id="error" class="alert alert-danger alert-dismissible" style="display: none">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-ban"></i> Ошибка!</h4>
+                            </div>
+
+
                             <!-- /.box-header -->
                             <div class="box-body">
                                 <form id="student_edit"
