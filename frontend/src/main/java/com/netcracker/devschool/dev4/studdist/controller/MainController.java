@@ -25,6 +25,7 @@ package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.service.FacultyService;
 import com.netcracker.devschool.dev4.studdist.service.HeadOfPracticeService;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.service.UserService;
@@ -59,6 +60,9 @@ public class MainController {
 
     @Autowired
     private HeadOfPracticeService headOfPracticeService;
+
+    @Autowired
+    private FacultyService facultyService;
 
     @RequestMapping(value = {"/", "/welcome**"}, method = RequestMethod.GET)
     public ModelAndView defaultPage() {
@@ -121,6 +125,7 @@ public class MainController {
             model.addObject("name", student.getFname() + " " + student.getLname());
             model.addObject("imageUrl", "resources/img/avatars/" + student.getImageUrl());
             model.addObject("id", student.getId());
+            model.addObject("faculties", facultyService.findAll());
         }
         model.setViewName("student");
         return model;

@@ -33,11 +33,30 @@
                     $('#group').text(data.group);
                 }
             });
+
+            $('#faculties').on('change', function () {
+                refreshSpecialities(this.value);
+            })
+
         });
+        function refreshSpecialities(id) {
+            $.ajax({
+                url: 'university/getSpecialitiesByFacultyId/' + id,
+                dataType: 'json',
+                success: function (data) {
+                    $('#specs').find('option').remove();
+                    var options = "";
+                    $.each(data, function (index, value) {
+                        options += '<option value="' + value.id + '">' + value.name + '</option>';
+                    })
+                    $('#specs').html(options);
+                }
+            });
+        }
     </script>
 
 </head>
-<body class="hold-transition login-page">
+<body onload="refreshSpecialities(1)" class="hold-transition login-page">
 <section class="content">
 
     <div class="row">
@@ -109,22 +128,16 @@
                                     <div class="form-group">
                                         <label>Выберите факультет</label>
                                         <select id="faculties" name="faculty" class="form-control">
-                                            <option value="1">ФКП</option>
-                                            <option value="2">ФИТУ</option>
-                                            <option value="3">ФРЭ</option>
-                                            <option value="4">ФТК</option>
-                                            <option value="5">ФКСИС</option>
+                                            <c:forEach items="${faculties}" var="item">
+                                                <option value="${item.getId()}">${item.getName()}</option>
+                                            </c:forEach>
                                         </select>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Выберите специальность</label>
-                                        <select name="speciality" class="form-control">
-                                            <option value="1">ФКП</option>
-                                            <option value="2">ФИТУ</option>
-                                            <option value="3">ФРЭ</option>
-                                            <option value="4">ФТК</option>
-                                            <option value="5">ФКСИС</option>
+                                        <select id="specs" name="speciality" class="form-control">
+
                                         </select>
                                     </div>
 
