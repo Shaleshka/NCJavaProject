@@ -155,12 +155,14 @@
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Имя</label>
-                                        <input type="text" class="form-control" name="fname"
+                                        <input data-validation="length alphanumeric" data-validation-length="2-45"
+                                               type="text" class="form-control" name="fname"
                                                placeholder="Введите имя...">
                                     </div>
                                     <div class="form-group">
                                         <label>Фамилия</label>
-                                        <input type="text" class="form-control" name="lname"
+                                        <input data-validation="length alphanumeric" data-validation-length="2-45"
+                                               type="text" class="form-control" name="lname"
                                                placeholder="Введите фамилию...">
                                     </div>
 
@@ -189,7 +191,9 @@
 
                                     <div class="form-group">
                                         <label>Группа</label>
-                                        <input type="text" class="form-control" name="group"
+                                        <input data-validation="length number" data-validation-length="6"
+                                               data-validation-error-msg="Группа должна быть шестизначным числом"
+                                               type="text" class="form-control" name="group"
                                                placeholder="Введите группу...">
                                     </div>
 
@@ -202,7 +206,9 @@
 
                                     <div class="form-group">
                                         <label>Средний балл</label>
-                                        <input type="text" class="form-control" name="avgScore"
+                                        <input data-validation="number" data-validation-allowing="range[4.0;10.0],float"
+                                               data-validation-error-msg="Значение выходит за диапазон возможных оценок"
+                                               type="text" class="form-control" name="avgScore"
                                                placeholder="Введите ср. балл...">
                                     </div>
                                     <input type="hidden" name="${_csrf.parameterName}"
@@ -302,6 +308,13 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+<!-- Form validator -->
+<script src="resources/js/libs/jquery.form-validator.min.js"></script>
+<script>
+    $.validate({
+        lang: 'ru'
+    });
+</script>
 <jsp:include page="/jsp/blocks/scripts.jsp"/>
 </body>
 </html>
