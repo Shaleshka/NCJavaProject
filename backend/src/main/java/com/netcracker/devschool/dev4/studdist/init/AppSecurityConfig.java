@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import javax.sql.DataSource;
 
 /**
- * Created by Shaleshka on 19.10.17.
+ * Spring security configuration
  */
 @Configuration
 @EnableWebSecurity

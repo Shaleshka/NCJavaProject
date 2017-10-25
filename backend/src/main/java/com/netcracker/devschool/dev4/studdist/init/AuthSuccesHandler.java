@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by Shaleshka on 19.10.17.
+ * Handles different redirects after login for different users
  */
 class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     @Override

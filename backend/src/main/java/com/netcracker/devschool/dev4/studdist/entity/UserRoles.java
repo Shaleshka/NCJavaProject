@@ -5,9 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * Created by Shaleshka on 23.10.17.
- */
 @Entity
 @Table(name = "user_roles")
 public class UserRoles {

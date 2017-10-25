@@ -7,11 +7,9 @@ import javax.servlet.ServletRegistration;
 import java.io.File;
 
 /**
- * Created by Shaleshka on 19.10.17.
+ * Web app configuration
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
-    private int maxUploadSizeInMb = 1024 * 1024; // 1 MB
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -35,6 +33,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         File uploadDirectory = new File(System.getProperty("java.io.tmpdir"));
 
         // register a MultipartConfigElement
+        int maxUploadSizeInMb = 1024 * 1024;
         MultipartConfigElement multipartConfigElement =
                 new MultipartConfigElement(uploadDirectory.getAbsolutePath(),
                         maxUploadSizeInMb, maxUploadSizeInMb * 2, maxUploadSizeInMb / 2);

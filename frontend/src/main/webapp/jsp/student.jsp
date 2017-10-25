@@ -179,7 +179,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Выберите факультет</label>
+                                        <label for="faculties">Выберите факультет</label>
                                         <select id="faculties" name="faculty" class="form-control">
                                             <c:forEach items="${faculties}" var="item">
                                                 <option value="${item.getId()}">${item.getName()}</option>
@@ -188,7 +188,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Выберите специальность</label>
+                                        <label for="specs">Выберите специальность</label>
                                         <select id="specs" name="speciality" class="form-control">
 
                                         </select>

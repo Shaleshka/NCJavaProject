@@ -538,16 +538,16 @@
     $(function () {
 
         //Datemask dd/mm/yyyy
-        $('#datemask').inputmask('dd/mm/yyyy', {'placeholder': 'dd/mm/yyyy'})
+        $('#datemask').inputmask('dd/mm/yyyy', {'placeholder': 'dd/mm/yyyy'});
         //Datemask2 mm/dd/yyyy
-        $('#datemask2').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'})
+        $('#datemask2').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
         //Money Euro
-        $('[data-mask]').inputmask()
+        $('[data-mask]').inputmask();
 
         //Date range picker
-        $('#reservation').daterangepicker()
+        $('#reservation').daterangepicker();
         //Date range picker with time picker
-        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'})
+        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
         //Date range as a button
         $('#daterange-btn').daterangepicker(
             {
@@ -577,7 +577,7 @@
             'ordering': true,
             'info': true,
             'autoWidth': false
-        })
+        });
         $('#example2').DataTable({
             'paging': true,
             'lengthChange': false,
@@ -585,7 +585,7 @@
             'ordering': true,
             'info': true,
             'autoWidth': false
-        })
+        });
         $('#tfaculty').DataTable({
             'paging': true,
             'lengthChange': false,
@@ -593,7 +593,7 @@
             'ordering': true,
             'info': true,
             'autoWidth': false
-        })
+        });
         $('#tgroups').DataTable({
             'paging': true,
             'lengthChange': false,

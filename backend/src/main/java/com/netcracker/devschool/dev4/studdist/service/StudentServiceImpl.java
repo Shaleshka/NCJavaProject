@@ -8,9 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * Created by Shaleshka on 23.10.17.
- */
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -20,8 +17,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public Student create(Student student) {
-        Student createdStudent = student;
-        return studentRepository.save(createdStudent);
+        return studentRepository.save(student);
     }
 
     @Override

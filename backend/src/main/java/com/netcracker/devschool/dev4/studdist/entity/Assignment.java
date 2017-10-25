@@ -4,9 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * Created by Shaleshka on 23.10.17.
- */
 @Entity
 @Table(name = "assignments")
 public class Assignment {
@@ -37,8 +34,7 @@ public class Assignment {
 
         Assignment that = (Assignment) o;
 
-        if (practiceId != that.practiceId) return false;
-        return studentId == that.studentId;
+        return practiceId == that.practiceId && studentId == that.studentId;
     }
 
     @Override

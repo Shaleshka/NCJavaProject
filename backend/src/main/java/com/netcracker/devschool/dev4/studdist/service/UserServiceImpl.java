@@ -10,9 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * Created by Shaleshka on 19.10.17.
- */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -63,6 +60,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int getIdByName(String name) {
-        return userRolesRepository.findByName(name).getUser_role_id();
+        return userRolesRepository.findByUsername(name).getUser_role_id();
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
- * Created by Shaleshka on 24.10.17.
+ * Controller for methods connected with managing faculties and specialities
  */
 @Controller
 @RequestMapping(value = "/university")

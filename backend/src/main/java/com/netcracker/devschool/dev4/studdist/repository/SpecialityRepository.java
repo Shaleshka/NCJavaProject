@@ -7,9 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/**
- * Created by Shaleshka on 23.10.17.
- */
 public interface SpecialityRepository extends JpaRepository<Speciality, Integer> {
 
     @Query("select s from Speciality s where s.facultyId = :facultyid")

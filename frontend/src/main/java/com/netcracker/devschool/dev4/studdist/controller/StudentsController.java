@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
- * Created by Shaleshka on 23.10.17.
+ * Controller for methods connected with students (info, updating, etc.)
  */
 @Controller
 @RequestMapping(value = "/students")
@@ -22,8 +22,6 @@ public class StudentsController {
 
     @Autowired
     private StudentService studentService;
-
-    private String UPLOADED_FOLDER = "C:/Users/Shaleshka/Desktop/NCJavaProject/images/";
 
     //Save the uploaded file to this folder
 
@@ -69,6 +67,7 @@ public class StudentsController {
                 // Get the file and save it somewhere
 
                 byte[] bytes = file.getBytes();
+                String UPLOADED_FOLDER = "C:/Users/Shaleshka/Desktop/NCJavaProject/images/";
                 Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
                 Files.write(path, bytes);
 

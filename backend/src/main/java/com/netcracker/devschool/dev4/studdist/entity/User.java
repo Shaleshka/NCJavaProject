@@ -1,13 +1,9 @@
 package com.netcracker.devschool.dev4.studdist.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * Created by Shaleshka on 16.10.17.
- */
 @Entity
 @Table(name = "users")
 public class User {
@@ -16,6 +12,7 @@ public class User {
     private String username;
 
     private String password;
+    private int enabled;
 
     public String getUsername() {
         return username;
@@ -40,8 +37,6 @@ public class User {
     public void setEnabled(int enabled) {
         this.enabled = enabled;
     }
-
-    private int enabled;
 
     @Override
     public boolean equals(Object o) {

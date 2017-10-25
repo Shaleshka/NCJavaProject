@@ -161,7 +161,7 @@
                                         <input type="text" class="form-control" placeholder="Введите имя...">
                                     </div>
                                     <div class="form-group">
-                                        <label>Дата практики:</label>
+                                        <label for="reservation">Дата практики:</label>
                                         <div class="input-group">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
@@ -177,8 +177,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Выберите факультет</label>
-                                        <select class="form-control">
+                                        <label for="faculties">Выберите факультет</label>
+                                        <select id="faculties" class="form-control">
                                             <option>Любой</option>
                                             <option>ФКП</option>
                                             <option>ФИТУ</option>
@@ -189,8 +189,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Выберите специальность</label>
-                                        <select class="form-control">
+                                        <label for="specialities">Выберите специальность</label>
+                                        <select id="specialities" class="form-control">
                                             <option>Любая</option>
                                             <option>ПМС</option>
                                             <option>ИСИТ (БМ)</option>
@@ -236,16 +236,16 @@
     $(function () {
 
         //Datemask dd/mm/yyyy
-        $('#datemask').inputmask('dd/mm/yyyy', {'placeholder': 'dd/mm/yyyy'})
+        $('#datemask').inputmask('dd/mm/yyyy', {'placeholder': 'dd/mm/yyyy'});
         //Datemask2 mm/dd/yyyy
-        $('#datemask2').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'})
+        $('#datemask2').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'});
         //Money Euro
-        $('[data-mask]').inputmask()
+        $('[data-mask]').inputmask();
 
         //Date range picker
-        $('#reservation').daterangepicker()
+        $('#reservation').daterangepicker();
         //Date range picker with time picker
-        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'})
+        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
         //Date range as a button
         $('#daterange-btn').daterangepicker(
             {
