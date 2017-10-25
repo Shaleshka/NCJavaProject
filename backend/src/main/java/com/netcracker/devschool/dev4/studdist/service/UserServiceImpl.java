@@ -1,6 +1,7 @@
 package com.netcracker.devschool.dev4.studdist.service;
 
 import com.netcracker.devschool.dev4.studdist.entity.User;
+import com.netcracker.devschool.dev4.studdist.entity.UserRoles;
 import com.netcracker.devschool.dev4.studdist.repository.UserRepository;
 import com.netcracker.devschool.dev4.studdist.repository.UserRolesRepository;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User create(User user) {
-        User createdUser = user;
-        return userRepository.save(createdUser);
+    public UserRoles create(User user, UserRoles userRoles) {
+
+        userRepository.save(user);
+        return userRolesRepository.save(userRoles);
     }
 
     @Override

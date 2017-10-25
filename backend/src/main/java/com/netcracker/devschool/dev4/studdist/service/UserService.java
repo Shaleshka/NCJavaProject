@@ -1,6 +1,7 @@
 package com.netcracker.devschool.dev4.studdist.service;
 
 import com.netcracker.devschool.dev4.studdist.entity.User;
+import com.netcracker.devschool.dev4.studdist.entity.UserRoles;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by Shaleshka on 19.10.17.
  */
 public interface UserService {
-    public User create(User user);
+    public UserRoles create(User user, UserRoles userRoles);
 
     public User delete(long id) throws Exception;
 

@@ -24,17 +24,13 @@
     <div class="register-box-body">
         <p class="login-box-msg">Регистрация</p>
 
-        <form action="/register_new" method="post">
+        <form action="/register" method="post">
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Имя">
-                <span class="glyphicon glyphicon-user form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="email" class="form-control" placeholder="Email">
+                <input type="email" class="form-control" name="username" placeholder="Email">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" class="form-control" placeholder="Пароль">
+                <input type="password" class="form-control" name="password" placeholder="Пароль">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
@@ -46,11 +42,13 @@
                 <div class="col-xs-4" style="width: 100%">
                     <button type="submit" class="btn btn-primary btn-block btn-flat">Зарегистрироваться</button>
                 </div>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <!-- /.col -->
             </div>
         </form>
 
-        <a href="/loginpage" class="text-center">Я уже зарегестрирован</a>
+        <a href="/login" class="text-center">Я уже зарегестрирован</a>
     </div>
     <!-- /.form-box -->
 </div>

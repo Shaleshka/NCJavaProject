@@ -16,26 +16,10 @@
     <title>Система распределения студентов | Профиль</title>
     <jsp:include page="/jsp/blocks/header.jsp"/>
 
+    <script src="resources/js/libs/jquery.form-validator.min.js"></script>
+
     <script>
         $(function () {
-            // bind 'myForm' and provide a simple callback function
-            $('#student_edit').ajaxForm({
-                success: function (data) {
-                    if (data) {
-                        $('#user_avatar').attr("src", "images/" + data.imageUrl);
-                        $('#user_name').html(data.fname + " " + data.lname);
-                        //that's a trick to avoid requests to a faculty table for a name (that'll mean either additional
-                        // request from here, or returing something else than student from controller)
-                        // we will do such request to fill our select below
-                        //(not implemented yet)
-                        $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
-                        $('#group').text(data.group);
-                        $('#success').css('display', 'block');
-                    } else {
-                        $('#error').css('display', 'block');
-                    }
-                }
-            });
 
             $('#fileupload').ajaxForm({
                 success: function (data) {
@@ -82,7 +66,28 @@
                     if (data.isBudget) $('input[name=isBudget]').iCheck('toggle');
                     $('input[name=avgScore]').val(data.avgScore);
                 }
-            })
+            });
+            $('#student_edit').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        $('#user_avatar').attr("src", "images/" + data.imageUrl);
+                        $('#user_name').html(data.fname + " " + data.lname);
+                        //that's a trick to avoid requests to a faculty table for a name (that'll mean either additional
+                        // request from here, or returing something else than student from controller)
+                        // we will do such request to fill our select below
+                        //(not implemented yet)
+                        $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
+                        $('#group').text(data.group);
+                        $('#success').css('display', 'block');
+                    } else {
+                        $('#error').css('display', 'block');
+                    }
+                }
+            });
+            $.validate({
+                lang: 'ru'
+            });
 
         }
     </script>
@@ -155,13 +160,13 @@
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Имя</label>
-                                        <input data-validation="length alphanumeric" data-validation-length="2-45"
+                                        <input data-validation="length letternumeric" data-validation-length="2-45"
                                                type="text" class="form-control" name="fname"
                                                placeholder="Введите имя...">
                                     </div>
                                     <div class="form-group">
                                         <label>Фамилия</label>
-                                        <input data-validation="length alphanumeric" data-validation-length="2-45"
+                                        <input data-validation="length letternumeric" data-validation-length="2-45"
                                                type="text" class="form-control" name="lname"
                                                placeholder="Введите фамилию...">
                                     </div>
@@ -308,13 +313,6 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-<!-- Form validator -->
-<script src="resources/js/libs/jquery.form-validator.min.js"></script>
-<script>
-    $.validate({
-        lang: 'ru'
-    });
-</script>
 <jsp:include page="/jsp/blocks/scripts.jsp"/>
 </body>
 </html>

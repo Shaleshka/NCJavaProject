@@ -25,6 +25,8 @@ package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.entity.User;
+import com.netcracker.devschool.dev4.studdist.entity.UserRoles;
 import com.netcracker.devschool.dev4.studdist.service.FacultyService;
 import com.netcracker.devschool.dev4.studdist.service.HeadOfPracticeService;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
@@ -64,14 +66,10 @@ public class MainController {
     @Autowired
     private FacultyService facultyService;
 
-    @RequestMapping(value = {"/", "/welcome**"}, method = RequestMethod.GET)
-    public ModelAndView defaultPage() {
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String registerPage() {
 
-        ModelAndView model = new ModelAndView();
-        model.addObject("title", "Spring Security Login Form - Database Authentication");
-        model.addObject("message", "This is default page!");
-        model.setViewName("hello");
-        return model;
+        return "register";
 
     }
 
@@ -193,6 +191,35 @@ public class MainController {
     private int getErrorCode(HttpServletRequest httpRequest) {
         return (Integer) httpRequest
                 .getAttribute("javax.servlet.error.status_code");
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ModelAndView registerStudent(@RequestParam(value = "username") String username,
+                                        @RequestParam(value = "password") String password) {
+        User user = new User();
+        user.setUsername(username);
+        password = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+        user.setPassword(password);
+        user.setEnabled(1);
+        UserRoles userRoles = new UserRoles();
+        userRoles.setUsername(username);
+        userRoles.setRole("ROLE_STUDENT");
+        int id = userService.create(user, userRoles).getUser_role_id();
+        Student student = new Student();
+        student.setId(id);
+        student.setFname("");
+        student.setLname("");
+        student.setImageUrl("student_default_avatar.png");
+        student.setGroup(100000);
+        student.setAvgScore(10);
+        student.setFacultyId(1);
+        student.setSpecialityId(1);
+        student.setCourse(1);
+        studentService.create(student);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("msg", "Вы были успешно зарегистрированы. Теперь вы можете войти с ипользованием указанного логина и пароля");
+        modelAndView.setViewName("login");
+        return modelAndView;
     }
 }
 /*
