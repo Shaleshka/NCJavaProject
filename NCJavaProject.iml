@@ -46,6 +46,9 @@
     <orderEntry type="library" name="Maven: javax.validation:validation-api:1.0.0.GA" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:jstl:1.2" level="project" />
+    <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.1" level="project" />
+    <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.13" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.5.0" level="project" />

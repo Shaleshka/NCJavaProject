@@ -47,6 +47,9 @@
           <element id="library" level="project" name="Maven: org.slf4j:jcl-over-slf4j:1.7.1" />
           <element id="library" level="project" name="Maven: javax.validation:validation-api:1.0.0.GA" />
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.1" />
+          <element id="library" level="project" name="Maven: javax.xml.stream:stax-api:1.0-2" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.13" />
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.5.0" />

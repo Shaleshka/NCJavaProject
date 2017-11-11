@@ -15,8 +15,78 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Система распределения студентов | Профиль</title>
     <jsp:include page="/jsp/blocks/header.jsp"/>
+
+    <script>
+        var id = '${id}';
+        function hopPageInit() {
+            $.ajax({
+                url: 'practice/getByHop/' + id,
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        $('#practices').append('<div class="panel box box-primary">\n' +
+                            '                                        <div class="box-header with-border">\n' +
+                            '                                            <h4 class="box-title">\n' +
+                            '                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_'+value.id+'">\n' +
+                            '                                                    '+value.name+'\n' +
+                            '                                                </a>\n' +
+                            '                                            </h4>\n' +
+                            '                                        </div>\n' +
+                            '                                        <div id="collapse_'+value.id+'" class="panel-collapse collapse in">\n' +
+                            '                                            <div class="box">\n' +
+                            '                                                <div class="box-header">\n' +
+                            '                                                    <h3 class="box-title">Студенты</h3>\n' +
+                            '                                                </div>\n' +
+                            '                                                <!-- /.box-header -->\n' +
+                            '                                                <div class="box-body">\n' +
+                            '                                                    <table id="practice_'+value.id+'" class="table table-bordered table-striped">\n' +
+                            '                                                        <thead>\n' +
+                            '                                                        <tr>\n' +
+                            '                                                            <th>Имя</th>\n' +
+                            '                                                            <th>Фамилия</th>\n' +
+                            '                                                            <th>Факультет</th>\n' +
+                            '                                                            <th>Специальность</th>\n' +
+                            '                                                            <th>Группа</th>\n' +
+                            '                                                            <th>Средний балл</th>\n' +
+                            '                                                        </tr>\n' +
+                            '                                                        </thead>\n' +
+                            '                                                        <tbody>\n' +
+                            '                                                        </tbody>\n' +
+                            '                                                        <tfoot>\n' +
+                            '                                                        <tr>\n' +
+                            '                                                            <th>Имя</th>\n' +
+                            '                                                            <th>Фамилия</th>\n' +
+                            '                                                            <th>Факультет</th>\n' +
+                            '                                                            <th>Специальность</th>\n' +
+                            '                                                            <th>Группа</th>\n' +
+                            '                                                            <th>Средний балл</th>\n' +
+                            '                                                        </tr>\n' +
+                            '                                                        </tfoot>\n' +
+                            '                                                    </table>\n' +
+                            '                                                </div>\n' +
+                            '                                                <!-- /.box-body -->\n' +
+                            '                                            </div>\n' +
+                            '                                            <!-- /.box -->\n' +
+                            '\n' +
+                            '                                        </div>\n' +
+                            '                                    </div>');
+                        $('#practice_'+value.id).DataTable({
+                            'paging': true,
+                            'lengthChange': false,
+                            'searching': false,
+                            'ordering': false,
+                            'info': false,
+                            'autoWidth': false
+                        })
+
+                    })
+                }
+            });
+        }
+    </script>
+
 </head>
-<body class="hold-transition login-page">
+<body onload="hopPageInit()" class="hold-transition login-page">
 <section class="content">
 
     <div class="row">
@@ -65,81 +135,8 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <div class="box-group" id="accordion">
-                                    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                                    <div class="panel box box-success">
-                                        <div class="box-header with-border">
-                                            <h4 class="box-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                                    Java EE Development - практика проходит
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseOne" class="panel-collapse collapse in">
-                                            <div class="box">
-                                                <div class="box-header">
-                                                    <h3 class="box-title">Студенты</h3>
-                                                </div>
-                                                <!-- /.box-header -->
-                                                <div class="box-body">
-                                                    <table id="example1" class="table table-bordered table-striped">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Имя</th>
-                                                            <th>Фамилия</th>
-                                                            <th>Факультет</th>
-                                                            <th>Специальность</th>
-                                                            <th>Группа</th>
-                                                            <th>Средний балл</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr>
-                                                            <td>Андрей</td>
-                                                            <td>Даниленко</td>
-                                                            </td>
-                                                            <td>ФКП</td>
-                                                            <td>ПМС</td>
-                                                            <td>513803</td>
-                                                            <td>-4</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Костя</td>
-                                                            <td>Новичук</td>
-                                                            </td>
-                                                            <td>ФКП</td>
-                                                            <td>ПМС</td>
-                                                            <td>513803</td>
-                                                            <td>-3</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Евгений</td>
-                                                            <td>Шнейдеров</td>
-                                                            </td>
-                                                            <td>ФКП</td>
-                                                            <td>ИСИТ(БМ)</td>
-                                                            <td>514301</td>
-                                                            <td>9.5</td>
-                                                        </tr>
-                                                        </tbody>
-                                                        <tfoot>
-                                                        <tr>
-                                                            <th>Имя</th>
-                                                            <th>Фамилия</th>
-                                                            <th>Факультет</th>
-                                                            <th>Специальность</th>
-                                                            <th>Группа</th>
-                                                            <th>Средний балл</th>
-                                                        </tr>
-                                                        </tfoot>
-                                                    </table>
-                                                </div>
-                                                <!-- /.box-body -->
-                                            </div>
-                                            <!-- /.box -->
-
-                                        </div>
-                                    </div>
+                                <div class="box-group" id="practices">
+                                    <!-- collapsing boxes with tables -->
                                 </div>
                             </div>
                             <!-- /.box-body -->

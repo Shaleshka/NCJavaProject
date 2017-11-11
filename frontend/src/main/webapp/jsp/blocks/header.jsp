@@ -37,3 +37,5 @@
 <script src="resources/js/libs/jquery.inputmask.js"></script>
 <script src="resources/js/libs/jquery.inputmask.date.extensions.js"></script>
 <script src="resources/js/libs/jquery.inputmask.extensions.js"></script>
+
+<script src="resources/js/libs/jquery.form-validator.min.js"></script>

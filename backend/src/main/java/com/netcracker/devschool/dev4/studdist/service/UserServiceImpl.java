@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public int getIdByName(String name) {
         return userRolesRepository.findByUsername(name).getUser_role_id();
     }

@@ -16,8 +16,6 @@
     <title>Система распределения студентов | Профиль</title>
     <jsp:include page="/jsp/blocks/header.jsp"/>
 
-    <script src="resources/js/libs/jquery.form-validator.min.js"></script>
-
     <script>
         $(function () {
 

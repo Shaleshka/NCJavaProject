@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_ADDITIONAL_VM_OPTIONS" value="--add-modules java.se.ee" />
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -12,7 +13,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="backend" target="1.8" />
-      <module name="etalon2017" target="1.8" />
       <module name="frontend" target="1.8" />
       <module name="NCJavaProject" target="1.8" />
     </bytecodeTargetLevel>
