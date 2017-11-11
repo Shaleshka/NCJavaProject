@@ -67,7 +67,7 @@ public class StudentsController {
                 // Get the file and save it somewhere
 
                 byte[] bytes = file.getBytes();
-                String UPLOADED_FOLDER = "C:/Users/Shaleshka/Desktop/NCJavaProject/images/";
+                String UPLOADED_FOLDER = "D:/Programming/NCJavaProject/images/";
                 Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
                 Files.write(path, bytes);
 

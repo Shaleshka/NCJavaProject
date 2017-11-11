@@ -30,6 +30,32 @@
             })
 
         });
+
+        function customDateConverter(date) {
+            var dim = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var mstrings = ["января", "февраля", "марта", "апреля", "мая", "июня",
+                "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+            var seconds = date/1000+3*3600;
+            var i=0;
+            while (seconds>3600*24*365) {
+                seconds-=3600*24*365+!(i%4)*24*3600;
+                i++;
+            }
+            year=i+1970;
+            if (year%4===0) dim[2]=29;
+            var month;
+            for (i=0; i<12; i++) {
+                seconds-=dim[i]*24*3600;
+                if (seconds<0) {
+                    seconds+=dim[i]*24*3600;
+                    month = i;
+                    break;
+                }
+            }
+            var days = seconds/(24*3600)+1;
+            return days.toString()+" "+mstrings[month]+" "+year.toString();
+        }
+
         function refreshSpecialities(id, val) {
             $.ajax({
                 url: 'university/getSpecialitiesByFacultyId/' + id,
@@ -65,6 +91,33 @@
                     $('input[name=avgScore]').val(data.avgScore);
                 }
             });
+
+            $.ajax({
+                url: 'practice/getByStudent/${id}',
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        var types=["Начало", "Конец"];
+                        var types_colors=["green","red"];
+                        $('#events').append('<li class="time-label">\n' +
+                            '                        <span class="bg-'+types_colors[value.type]+'">\n' +
+                            '                          '+customDateConverter(value.date)+'\n' +
+                            '                        </span>\n' +
+                            '                            </li>\n' +
+                            '                            <li>\n' +
+                            '                                <i class="fa fa-envelope bg-blue"></i>\n' +
+                            '\n' +
+                            '                                <div class="timeline-item">\n' +
+                            '                                    \n' +
+                            '\n' +
+                            '                                    <h3 class="timeline-header">'+types[value.type]+' практики '+value.practiceName+' у руководителя '+
+                            value.hopName+' (компания '+value.companyName+' )</h3>\n' +
+                            '                                </div>\n' +
+                            '                            </li>')
+                    });
+                }
+            });
+
             $('#student_edit').ajaxForm({
                 dataType: 'json',
                 success: function (data) {
@@ -227,45 +280,8 @@
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="timeline">
                         <!-- The timeline -->
-                        <ul class="timeline timeline-inverse">
-                            <!-- timeline time label -->
-                            <li class="time-label">
-                        <span class="bg-red">
-                          10 Февраля 2017
-                        </span>
-                            </li>
-                            <!-- /.timeline-label -->
-                            <!-- timeline item -->
-                            <li>
-                                <i class="fa fa-envelope bg-blue"></i>
-
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                                    <h3 class="timeline-header">Ваша практика у руководителя <a href="#">ИНТЕГРАЛ</a>
-                                        закончилась</h3>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
-                            <!-- timeline time label -->
-                            <li class="time-label">
-                        <span class="bg-green">
-                          3 января 2017
-                        </span>
-                            </li>
-                            <!-- /.timeline-label -->
-                            <!-- timeline item -->
-                            <li>
-                                <i class="fa fa-envelope bg-blue"></i>
-
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                                    <h3 class="timeline-header">Вы назначены на практику у руководителя <a href="#">ИНТЕГРАЛ</a>
-                                    </h3>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
+                        <ul id="events" class="timeline timeline-inverse">
+                            <!-- timeline with events on it -->
                         </ul>
                     </div>
                     <!-- /.tab-pane -->

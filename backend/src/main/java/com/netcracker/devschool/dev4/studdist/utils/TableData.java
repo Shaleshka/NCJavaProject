@@ -1,4 +1,4 @@
-package com.netcracker.devschool.dev4.studdist.dataTableUtility;
+package com.netcracker.devschool.dev4.studdist.utils;
 
 import java.util.ArrayList;
 import java.util.List;

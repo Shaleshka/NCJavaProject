@@ -1,7 +1,9 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
-import com.netcracker.devschool.dev4.studdist.dataTableUtility.StudentsConverter;
-import com.netcracker.devschool.dev4.studdist.dataTableUtility.TableData;
+import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
+import com.netcracker.devschool.dev4.studdist.utils.Event;
+import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
+import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import com.netcracker.devschool.dev4.studdist.entity.Practice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.service.*;
@@ -11,15 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/practice")
@@ -40,10 +38,27 @@ public class PracticeController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HeadOfPracticeService headOfPracticeService;
+
     @RequestMapping(value = "/getByHop/{id}", method = RequestMethod.GET)
     @ResponseBody
     private List<Practice> getByHopId(@PathVariable String id) {
         return practiceService.findByHopId(Integer.parseInt(id));
+    }
+
+    @RequestMapping(value = "/getByStudent/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    private List<Event> getByStudentId(@PathVariable String id) {
+        List<Practice> list = practiceService.findByStudentId(Integer.parseInt(id));
+        List<Event> events = new ArrayList<>();
+        for (Practice item : list) {
+            HeadOfPractice hop = headOfPracticeService.findById(item.getHopId());
+            events.add(new Event(item.getStart(),0,hop.getCompanyName(),hop.getFname()+" "+hop.getLname(),item.getName()));
+            events.add(new Event(item.getEnd(),1,hop.getCompanyName(),hop.getFname()+" "+hop.getLname(),item.getName()));
+        }
+        events.sort(Comparator.comparing(Event::getDate).reversed());
+        return events;
     }
 
     @RequestMapping(value = "/tableForPractice/{id}", method = RequestMethod.GET)
@@ -65,6 +80,7 @@ public class PracticeController {
 
     @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
     @ResponseBody
+    @PreAuthorize("hasAnyAuthority('ROLE_HOP', 'ROLE_ADMIN')")
     private Practice addPractice(@RequestParam(value = "name") String name,
                                  @RequestParam(value = "daterange") String daterange,
                                  @RequestParam(value = "number") String number,
