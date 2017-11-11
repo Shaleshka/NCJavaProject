@@ -71,13 +71,11 @@
                             '                                        </div>\n' +
                             '                                    </div>');
                         $('#practice_'+value.id).DataTable({
-                            'paging': true,
-                            'lengthChange': false,
-                            'searching': false,
-                            'ordering': false,
-                            'info': false,
-                            'autoWidth': false
-                        })
+                            "processing": true,
+                            "serverSide": true,
+                            'autoWidth': false,
+                            "ajax": "practice/tableForPractice/"+value.id
+                        });
 
                     })
                 }

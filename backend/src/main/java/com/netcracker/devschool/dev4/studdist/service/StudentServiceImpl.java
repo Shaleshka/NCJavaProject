@@ -2,6 +2,8 @@ package com.netcracker.devschool.dev4.studdist.service;
 
 import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.repository.StudentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,5 +59,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student findById(int id) {
         return studentRepository.findOne(id);
+    }
+
+    @Override
+    public List<Student> findByPracticeId(int id, int start, int length) {
+        PageRequest pageR = new PageRequest(start, length);
+        Page<Student> result = studentRepository.findByPracticeId(id, pageR);
+        return result.getContent();
     }
 }

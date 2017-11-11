@@ -14,4 +14,6 @@ public interface StudentService {
     Student update(Student student) throws Exception;
 
     Student findById(int id);
+
+    List<Student> findByPracticeId(int id, int start, int length);
 }
