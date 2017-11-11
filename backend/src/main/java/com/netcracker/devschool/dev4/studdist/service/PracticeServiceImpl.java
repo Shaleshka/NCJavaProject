@@ -50,6 +50,7 @@ public class PracticeServiceImpl implements PracticeService {
         updated.setHopId(practice.getHopId());
         updated.setFacultyId(practice.getFacultyId());
         updated.setSpecialityId(practice.getSpecialityId());
+        updated.setNumber(practice.getNumber());
         updated.setMinAvg(practice.getMinAvg());
         updated.setStart(practice.getStart());
         updated.setEnd(practice.getEnd());

@@ -4,17 +4,22 @@ import com.netcracker.devschool.dev4.studdist.dataTableUtility.StudentsConverter
 import com.netcracker.devschool.dev4.studdist.dataTableUtility.TableData;
 import com.netcracker.devschool.dev4.studdist.entity.Practice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
-import com.netcracker.devschool.dev4.studdist.service.FacultyService;
-import com.netcracker.devschool.dev4.studdist.service.PracticeService;
-import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
-import com.netcracker.devschool.dev4.studdist.service.StudentService;
+import com.netcracker.devschool.dev4.studdist.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping(value = "/practice")
@@ -31,6 +36,9 @@ public class PracticeController {
 
     @Autowired
     private SpecialityService specialityService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/getByHop/{id}", method = RequestMethod.GET)
     @ResponseBody
@@ -53,6 +61,44 @@ public class PracticeController {
             result.addData(StudentsConverter.studentToStringArray(item,facultyService,specialityService));
         }
         return result;
+    }
+
+    @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
+    @ResponseBody
+    private Practice addPractice(@RequestParam(value = "name") String name,
+                                 @RequestParam(value = "daterange") String daterange,
+                                 @RequestParam(value = "number") String number,
+                                 @RequestParam(value = "faculty") String faculty,
+                                 @RequestParam(value = "speciality") String speciality,
+                                 @RequestParam(value = "isBudget") String isBudget,
+                                 @RequestParam(value = "minAvg") String minAvg) {
+        //todo validation
+        Practice practice = new Practice();
+        practice.setName(name);
+        practice.setNumber(Integer.parseInt(number));
+        practice.setFacultyId(Integer.parseInt(faculty));
+        practice.setSpecialityId(Integer.parseInt(speciality));
+        if (isBudget != null) practice.setIsBudget(1);
+        else practice.setIsBudget(0);
+        practice.setMinAvg(Double.parseDouble(minAvg));
+
+        String[] dates = daterange.split(" - ");
+
+        DateFormat format = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
+        try {
+            Date start = format.parse(dates[0]);
+            Date end = format.parse(dates[1]);
+            practice.setStart(start);
+            practice.setEnd(end);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String uname = auth.getName();
+        int id = userService.getIdByName(uname);
+        practice.setHopId(id);
+        return practiceService.create(practice);
     }
 
 }

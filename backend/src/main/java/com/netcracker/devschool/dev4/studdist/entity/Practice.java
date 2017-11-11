@@ -14,9 +14,11 @@ public class Practice {
     private String name;
     private int facultyId;
     private int specialityId;
+    private int number;
     private double minAvg;
     private Date start;
     private Date end;
+    private int isBudget;
 
     @Override
     public boolean equals(Object o) {
@@ -95,5 +97,21 @@ public class Practice {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getIsBudget() {
+        return isBudget;
+    }
+
+    public void setIsBudget(int isBudget) {
+        this.isBudget = isBudget;
     }
 }

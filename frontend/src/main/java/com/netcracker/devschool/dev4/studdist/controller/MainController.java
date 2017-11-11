@@ -142,6 +142,7 @@ public class MainController {
             model.addObject("imageUrl", "images/" + headOfPractice.getImageUrl());
             model.addObject("company", headOfPractice.getCompanyName());
             model.addObject("id",id);
+            model.addObject("faculties", facultyService.findAll());
         }
         model.setViewName("headofpractice");
         return model;

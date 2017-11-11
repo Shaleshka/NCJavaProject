@@ -104,7 +104,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/images/**")
-                .addResourceLocations("file:///C:/Users/Shaleshka/Desktop/NCJavaProject/images/");
+                .addResourceLocations("file:///D:/Programming/NCJavaProject/images/");
     }
 
 }

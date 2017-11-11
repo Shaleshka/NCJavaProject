@@ -18,66 +18,106 @@
 
     <script>
         var id = '${id}';
+
+        function appendPractice(index, value) {
+            $('#practices').append('<div class="panel box box-primary">\n' +
+                '                                        <div class="box-header with-border">\n' +
+                '                                            <h4 class="box-title">\n' +
+                '                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_' + value.id + '">\n' +
+                '                                                    ' + value.name + '\n' +
+                '                                                </a>\n' +
+                '                                            </h4>\n' +
+                '                                        </div>\n' +
+                '                                        <div id="collapse_' + value.id + '" class="panel-collapse collapse in">\n' +
+                '                                            <div class="box">\n' +
+                '                                                <div class="box-header">\n' +
+                '                                                    <h3 class="box-title">Студенты</h3>\n' +
+                '                                                </div>\n' +
+                '                                                <!-- /.box-header -->\n' +
+                '                                                <div class="box-body">\n' +
+                '                                                    <table id="practice_' + value.id + '" class="table table-bordered table-striped">\n' +
+                '                                                        <thead>\n' +
+                '                                                        <tr>\n' +
+                '                                                            <th>Имя</th>\n' +
+                '                                                            <th>Фамилия</th>\n' +
+                '                                                            <th>Факультет</th>\n' +
+                '                                                            <th>Специальность</th>\n' +
+                '                                                            <th>Группа</th>\n' +
+                '                                                            <th>Средний балл</th>\n' +
+                '                                                        </tr>\n' +
+                '                                                        </thead>\n' +
+                '                                                        <tbody>\n' +
+                '                                                        </tbody>\n' +
+                '                                                        <tfoot>\n' +
+                '                                                        <tr>\n' +
+                '                                                            <th>Имя</th>\n' +
+                '                                                            <th>Фамилия</th>\n' +
+                '                                                            <th>Факультет</th>\n' +
+                '                                                            <th>Специальность</th>\n' +
+                '                                                            <th>Группа</th>\n' +
+                '                                                            <th>Средний балл</th>\n' +
+                '                                                        </tr>\n' +
+                '                                                        </tfoot>\n' +
+                '                                                    </table>\n' +
+                '                                                </div>\n' +
+                '                                                <!-- /.box-body -->\n' +
+                '                                            </div>\n' +
+                '                                            <!-- /.box -->\n' +
+                '\n' +
+                '                                        </div>\n' +
+                '                                    </div>');
+            $('#practice_' + value.id).DataTable({
+                "processing": true,
+                "serverSide": true,
+                'autoWidth': false,
+                "ajax": "practice/tableForPractice/" + value.id
+            });
+
+
+        }
+
         function hopPageInit() {
             $.ajax({
                 url: 'practice/getByHop/' + id,
                 dataType: 'json',
                 success: function (data) {
-                    $.each(data, function (index, value) {
-                        $('#practices').append('<div class="panel box box-primary">\n' +
-                            '                                        <div class="box-header with-border">\n' +
-                            '                                            <h4 class="box-title">\n' +
-                            '                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_'+value.id+'">\n' +
-                            '                                                    '+value.name+'\n' +
-                            '                                                </a>\n' +
-                            '                                            </h4>\n' +
-                            '                                        </div>\n' +
-                            '                                        <div id="collapse_'+value.id+'" class="panel-collapse collapse in">\n' +
-                            '                                            <div class="box">\n' +
-                            '                                                <div class="box-header">\n' +
-                            '                                                    <h3 class="box-title">Студенты</h3>\n' +
-                            '                                                </div>\n' +
-                            '                                                <!-- /.box-header -->\n' +
-                            '                                                <div class="box-body">\n' +
-                            '                                                    <table id="practice_'+value.id+'" class="table table-bordered table-striped">\n' +
-                            '                                                        <thead>\n' +
-                            '                                                        <tr>\n' +
-                            '                                                            <th>Имя</th>\n' +
-                            '                                                            <th>Фамилия</th>\n' +
-                            '                                                            <th>Факультет</th>\n' +
-                            '                                                            <th>Специальность</th>\n' +
-                            '                                                            <th>Группа</th>\n' +
-                            '                                                            <th>Средний балл</th>\n' +
-                            '                                                        </tr>\n' +
-                            '                                                        </thead>\n' +
-                            '                                                        <tbody>\n' +
-                            '                                                        </tbody>\n' +
-                            '                                                        <tfoot>\n' +
-                            '                                                        <tr>\n' +
-                            '                                                            <th>Имя</th>\n' +
-                            '                                                            <th>Фамилия</th>\n' +
-                            '                                                            <th>Факультет</th>\n' +
-                            '                                                            <th>Специальность</th>\n' +
-                            '                                                            <th>Группа</th>\n' +
-                            '                                                            <th>Средний балл</th>\n' +
-                            '                                                        </tr>\n' +
-                            '                                                        </tfoot>\n' +
-                            '                                                    </table>\n' +
-                            '                                                </div>\n' +
-                            '                                                <!-- /.box-body -->\n' +
-                            '                                            </div>\n' +
-                            '                                            <!-- /.box -->\n' +
-                            '\n' +
-                            '                                        </div>\n' +
-                            '                                    </div>');
-                        $('#practice_'+value.id).DataTable({
-                            "processing": true,
-                            "serverSide": true,
-                            'autoWidth': false,
-                            "ajax": "practice/tableForPractice/"+value.id
-                        });
+                    $.each(data, function (index, value) {appendPractice(index, value)});
+                }
+            });
+            $('#faculties').on('change', function () {
+                refreshSpecialities(this.value, 0);
+            });
+            refreshSpecialities(1, 0);
+            $('#request').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        appendPractice(0, data);
+                        $('#success').css('display', 'block');
+                    } else {
+                        $('#error').css('display', 'block');
+                    }
+                }
+            });
+            $.validate({
+                lang: 'ru'
+            });
+        }
 
-                    })
+        function refreshSpecialities(id, val) {
+            $.ajax({
+                url: 'university/getSpecialitiesByFacultyId/' + id,
+                dataType: 'json',
+                success: function (data) {
+                    $('#specs').find('option').remove();
+                    var options = "";
+                    $.each(data, function (index, value) {
+                        options += '<option value="' + value.id + '">' + value.name + '</option>';
+                    });
+                    $('#specs').html(options);
+                    if (val) {
+                        $('#specs').val(val);
+                    }
                 }
             });
         }
@@ -123,7 +163,7 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#activity" data-toggle="tab">Практики</a></li>
-                    <li><a href="#timeline" data-toggle="tab">Создать заявку</a></li>
+                    <li><a href="#newrequest" data-toggle="tab">Создать заявку</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
@@ -141,7 +181,18 @@
                         </div>
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="timeline">
+                    <div class="tab-pane" id="newrequest">
+
+                        <div id="success" class="alert alert-success alert-dismissible" style="display: none">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-check"></i> Заявка создана!</h4>
+                        </div>
+
+                        <div id="error" class="alert alert-danger alert-dismissible" style="display: none">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-ban"></i> Ошибка!</h4>
+                        </div>
+
                         <!-- The timeline -->
                         <div class="box box-primary">
                             <div class="box-header with-border">
@@ -149,11 +200,12 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <form role="form">
+                                <form role="form" id="request" action="practice/addRequest" method="post">
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Название практики</label>
-                                        <input type="text" class="form-control" placeholder="Введите имя...">
+                                        <input data-validation="length letternumeric" data-validation-length="2-45"
+                                               type="text" class="form-control" name="name" placeholder="Введите имя...">
                                     </div>
                                     <div class="form-group">
                                         <label for="reservation">Дата практики:</label>
@@ -161,51 +213,49 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right" id="reservation">
+                                            <input type="text" name="daterange" class="form-control pull-right" id="reservation">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Количество</label>
-                                        <input type="text" class="form-control" placeholder="Введите кол-во...">
+                                        <label>Количество студентов</label>
+                                        <input data-validation="number" data-validation-allowing="range[5;1000]"
+                                               data-validation-error-msg="Введите целое число от 5 до 1000" type="text"
+                                               class="form-control" name="number" placeholder="Введите кол-во...">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="faculties">Выберите факультет</label>
-                                        <select id="faculties" class="form-control">
-                                            <option>Любой</option>
-                                            <option>ФКП</option>
-                                            <option>ФИТУ</option>
-                                            <option>ФРЭ</option>
-                                            <option>ФТК</option>
-                                            <option>ФКСИС</option>
+                                        <select id="faculties" name="faculty" class="form-control">
+                                            <c:forEach items="${faculties}" var="item">
+                                                <option value="${item.getId()}">${item.getName()}</option>
+                                            </c:forEach>
                                         </select>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="specialities">Выберите специальность</label>
-                                        <select id="specialities" class="form-control">
-                                            <option>Любая</option>
-                                            <option>ПМС</option>
-                                            <option>ИСИТ (БМ)</option>
-                                            <option>ИПОИТ</option>
-                                            <option>МИКПРЭС</option>
-                                            <option>МЕДЭ</option>
+                                        <label for="specs">Выберите специальность</label>
+                                        <select id="specs" name="speciality" class="form-control">
+
                                         </select>
                                     </div>
 
                                     <div class="form-group">
                                         <label>
-                                            <input type="checkbox">
+                                            <input name="isBudget" type="checkbox">
                                             Бюджетник
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Минимальный средний балл</label>
-                                        <input type="text" class="form-control" placeholder="Введите ср. балл...">
+                                        <input data-validation="number" data-validation-allowing="range[4.0;10.0],float"
+                                               data-validation-error-msg="Значение выходит за диапазон возможных оценок"
+                                               type="text" name="minAvg" class="form-control" placeholder="Введите ср. балл...">
                                     </div>
+                                    <input type="hidden" name="${_csrf.parameterName}"
+                                           value="${_csrf.token}"/>
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary">Создать</button>
                                     </div>
