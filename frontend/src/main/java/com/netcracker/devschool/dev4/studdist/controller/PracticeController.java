@@ -70,10 +70,11 @@ public class PracticeController {
         List<Student> list = studentService.findByPracticeId(Integer.parseInt(id), Integer.parseInt(start), Integer.parseInt(length));
         TableData result = new TableData();
         result.setDraw(Integer.parseInt(draw));
+        StudentsConverter converter = new StudentsConverter();
         for (Student item: list
              ) {
             //passing services is temporary fix, todo: make this somehow normal
-            result.addData(StudentsConverter.studentToStringArray(item,facultyService,specialityService));
+            result.addData(converter.studentToStringArray(item,facultyService,specialityService));
         }
         return result;
     }

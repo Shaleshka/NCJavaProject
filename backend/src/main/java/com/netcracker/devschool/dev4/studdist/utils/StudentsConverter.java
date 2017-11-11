@@ -8,7 +8,7 @@ import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
 
 public class StudentsConverter {
 
-    public static String[] studentToStringArray(Student student, FacultyService facultyService, SpecialityService specialityService) {
+    public String[] studentToStringArray(Student student, FacultyService facultyService, SpecialityService specialityService) {
         String[] result = new String[6];
         result[0] = student.getFname();
         result[1] = student.getLname();
