@@ -1,7 +1,11 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.service.FacultyService;
+import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
+import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
+import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -22,6 +27,12 @@ public class StudentsController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private FacultyService facultyService;
+
+    @Autowired
+    private SpecialityService specialityService;
 
     //Save the uploaded file to this folder
 
@@ -89,6 +100,26 @@ public class StudentsController {
     @ResponseBody
     public Student getStudent(@PathVariable int id) {
         return studentService.findById(id);
+    }
+
+    @RequestMapping(value = "/tableAllStudents", method = RequestMethod.GET)
+    @ResponseBody
+    private TableData returnTable(
+                                  @RequestParam(value = "start") String start,
+                                  @RequestParam(value = "length") String length,
+                                  @RequestParam(value = "draw") String draw,
+                                  @RequestParam(value = "search[value]", required = false) String key) {
+        if (key==null) key="";
+        List<Student> list = studentService.findByParams(-1, key, "fname", "asc", Integer.parseInt(start), Integer.parseInt(length));
+        TableData result = new TableData();
+        result.setDraw(Integer.parseInt(draw));
+        StudentsConverter converter = new StudentsConverter();
+        for (Student item: list
+                ) {
+            //passing services is temporary fix, todo: make this somehow normal
+            result.addData(converter.studentToStringArrayAdvanced(item,facultyService,specialityService));
+        }
+        return result;
     }
 
 }

@@ -12,7 +12,15 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
-    @Query("select l from Student l where l.id in (select p.studentId from Assignment p where p.practiceId = :id)")
-    Page<Student> findByPracticeId(@Param("id") int id, Pageable page);
+    @Query("select l from Student l where l.id in (select p.studentId from Assignment " +
+            "p where p.practiceId = :id) and concat(l.fname, l.lname, l.group, l.avgScore, " +
+            "(select f.name from Faculty f where f.id = l.facultyId), (select s.name from " +
+            "Speciality s where s.id = l.specialityId)) like concat('%', :skey, '%') ")
+    Page<Student> findWithPracticeId(@Param("id") int id, @Param("skey") String key, Pageable page);
+
+    @Query("select l from Student l where concat(l.fname, l.lname, l.group, l.avgScore, " +
+            "(select f.name from Faculty f where f.id = l.facultyId), (select s.name from " +
+            "Speciality s where s.id = l.specialityId)) like concat('%', :skey, '%') ")
+    Page<Student> findWithoutPracticeId(@Param("skey") String key,  Pageable page);
 
 }

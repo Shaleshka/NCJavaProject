@@ -37,7 +37,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/hop/**").access("hasRole('ROLE_HOP')")
                 .antMatchers("/student/**").access("hasRole('ROLE_STUDENT')")
-                .antMatchers("/students/**").access("hasRole('ROLE_STUDENT')")
+                .antMatchers("/students/**").access("hasAnyAuthority('ROLE_STUDENT', 'ROLE_ADMIN')")
                 .antMatchers("/practice/**").access("hasAnyAuthority('ROLE_STUDENT', 'ROLE_ADMIN', 'ROLE_HOP')")
                 .and()
                 .formLogin().loginPage("/login")

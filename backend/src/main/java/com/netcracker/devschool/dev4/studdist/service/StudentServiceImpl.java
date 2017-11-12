@@ -4,6 +4,7 @@ import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.repository.StudentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> findByParams(int practiceId, String searchKey, String sortBy, String order, int start, int length) {
+        PageRequest pageR = new PageRequest(start, length, Sort.Direction.fromString(order), sortBy);
+        Page<Student> result;
+        if (practiceId!=-1) {
+            result = studentRepository.findWithPracticeId(practiceId, searchKey, pageR);
+        }
+        else {
+            result = studentRepository.findWithoutPracticeId(searchKey, pageR);
+        }
+        return result.getContent();
+    }
+
+    @Override
     @Transactional
     public Student update(Student student) throws Exception {
         Student updated = studentRepository.findOne(student.getId());
@@ -59,12 +73,5 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student findById(int id) {
         return studentRepository.findOne(id);
-    }
-
-    @Override
-    public List<Student> findByPracticeId(int id, int start, int length) {
-        PageRequest pageR = new PageRequest(start, length);
-        Page<Student> result = studentRepository.findByPracticeId(id, pageR);
-        return result.getContent();
     }
 }

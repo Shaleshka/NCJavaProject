@@ -1,13 +1,16 @@
 package com.netcracker.devschool.dev4.studdist.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class TableData {
     private int draw;
     private int recordsTotal;
     private int recordsFiltered;
     private List<String[]> data;
+    private String searchKey="";
 
     public TableData() {
         draw = 1;
@@ -17,6 +20,7 @@ public class TableData {
     }
 
     public void addData(String[] item) {
+        if (!Objects.equals(searchKey, "") && !Arrays.toString(item).contains(searchKey)) return;
         if (item!=null) {
             data.add(item);
             recordsTotal++;
@@ -50,5 +54,9 @@ public class TableData {
 
     public List<String[]> getData() {
         return data;
+    }
+
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
     }
 }

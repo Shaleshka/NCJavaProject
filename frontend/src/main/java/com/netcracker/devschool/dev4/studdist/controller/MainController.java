@@ -23,14 +23,8 @@
  */
 package com.netcracker.devschool.dev4.studdist.controller;
 
-import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
-import com.netcracker.devschool.dev4.studdist.entity.Student;
-import com.netcracker.devschool.dev4.studdist.entity.User;
-import com.netcracker.devschool.dev4.studdist.entity.UserRoles;
-import com.netcracker.devschool.dev4.studdist.service.FacultyService;
-import com.netcracker.devschool.dev4.studdist.service.HeadOfPracticeService;
-import com.netcracker.devschool.dev4.studdist.service.StudentService;
-import com.netcracker.devschool.dev4.studdist.service.UserService;
+import com.netcracker.devschool.dev4.studdist.entity.*;
+import com.netcracker.devschool.dev4.studdist.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -45,6 +39,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author anpi0316
@@ -65,6 +61,9 @@ public class MainController {
 
     @Autowired
     private FacultyService facultyService;
+
+    @Autowired
+    private SpecialityService specialityService;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String registerPage() {
@@ -150,8 +149,13 @@ public class MainController {
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String pageAdmin() {
-        return "admin";
+    public ModelAndView pageAdmin() {
+        ModelAndView model = new ModelAndView();
+        model.addObject("faculties",facultyService.findAll());
+        model.addObject("specialities",specialityService.findAll());
+        List<Faculty> list = facultyService.findAll();
+        model.setViewName("admin");
+        return model;
     }
 
     //for 403 access denied page

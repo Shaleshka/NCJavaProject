@@ -11,9 +11,10 @@ public interface StudentService {
 
     List<Student> findAll();
 
+    List<Student> findByParams(int practiceId, String searchKey, String sortBy, String order, int start, int length);
+
     Student update(Student student) throws Exception;
 
     Student findById(int id);
 
-    List<Student> findByPracticeId(int id, int start, int length);
 }

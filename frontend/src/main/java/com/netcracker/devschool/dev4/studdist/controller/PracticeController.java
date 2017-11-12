@@ -47,6 +47,12 @@ public class PracticeController {
         return practiceService.findByHopId(Integer.parseInt(id));
     }
 
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @ResponseBody
+    private List<Practice> getAll() {
+        return practiceService.findAll();
+    }
+
     @RequestMapping(value = "/getByStudent/{id}", method = RequestMethod.GET)
     @ResponseBody
     private List<Event> getByStudentId(@PathVariable String id) {
@@ -67,7 +73,7 @@ public class PracticeController {
                                   @RequestParam(value = "start") String start,
                                   @RequestParam(value = "length") String length,
                                   @RequestParam(value = "draw") String draw) {
-        List<Student> list = studentService.findByPracticeId(Integer.parseInt(id), Integer.parseInt(start), Integer.parseInt(length));
+        List<Student> list = studentService.findByParams(Integer.parseInt(id), "", "fname", "asc", Integer.parseInt(start), Integer.parseInt(length));
         TableData result = new TableData();
         result.setDraw(Integer.parseInt(draw));
         StudentsConverter converter = new StudentsConverter();

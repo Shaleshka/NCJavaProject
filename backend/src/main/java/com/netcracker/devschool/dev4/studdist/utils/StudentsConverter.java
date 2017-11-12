@@ -6,6 +6,8 @@ import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.service.FacultyService;
 import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
 
+import java.util.Arrays;
+
 public class StudentsConverter {
 
     public String[] studentToStringArray(Student student, FacultyService facultyService, SpecialityService specialityService) {
@@ -18,6 +20,18 @@ public class StudentsConverter {
         if (speciality != null) result[3] = speciality.getName(); else result[3]="undefined";
         result[4] = String.valueOf(student.getGroup());
         result[5] = String.valueOf(student.getAvgScore());
+        return result;
+    }
+
+    public String[] studentToStringArrayAdvanced(Student student, FacultyService facultyService, SpecialityService specialityService) {
+        String[] result = new String[8];
+        result = Arrays.copyOf(studentToStringArray(student,facultyService,specialityService),8);
+        result[6]="<button type=\"button\" class=\"btn btn-default\" onclick=\"assignStudent("+student.getId()+")\">\n" +
+                "                                                            Назначить\n" +
+                "                                                        </button>";
+        result[7]="<button type=\"button\" class=\"btn btn-primary\" onclick=\"editStudent("+student.getId()+")\">\n" +
+                "                                                            Редактировать\n" +
+                "                                                        </button>";
         return result;
     }
 
