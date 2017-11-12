@@ -59,4 +59,34 @@ public class TableData {
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
     }
+
+    //ancillary function
+
+    public String getColumnNameForTables(int id) {
+        String result;
+        switch (id) {
+            case 0:
+                result = "fname";
+                break;
+            case 1:
+                result = "lname";
+                break;
+            case 2:
+                result = "facultyId";
+                break;
+            case 3:
+                result = "specialityId";
+                break;
+            case 4:
+                result = "group";
+                break;
+            case 5:
+                result = "avgScore";
+                break;
+            default:
+                result = "id";
+                break;
+        }
+        return result;
+    }
 }

@@ -105,13 +105,15 @@ public class StudentsController {
     @RequestMapping(value = "/tableAllStudents", method = RequestMethod.GET)
     @ResponseBody
     private TableData returnTable(
-                                  @RequestParam(value = "start") String start,
-                                  @RequestParam(value = "length") String length,
-                                  @RequestParam(value = "draw") String draw,
-                                  @RequestParam(value = "search[value]", required = false) String key) {
+            @RequestParam(value = "start") String start,
+            @RequestParam(value = "length") String length,
+            @RequestParam(value = "draw") String draw,
+            @RequestParam(value = "search[value]", required = false) String key,
+            @RequestParam(value = "order[0][column]") String order,
+            @RequestParam(value = "order[0][dir]") String orderDir) {
         if (key==null) key="";
-        List<Student> list = studentService.findByParams(-1, key, "fname", "asc", Integer.parseInt(start), Integer.parseInt(length));
         TableData result = new TableData();
+        List<Student> list = studentService.findByParams(-1, key, result.getColumnNameForTables(Integer.parseInt(order)), orderDir, Integer.parseInt(start), Integer.parseInt(length));
         result.setDraw(Integer.parseInt(draw));
         StudentsConverter converter = new StudentsConverter();
         for (Student item: list

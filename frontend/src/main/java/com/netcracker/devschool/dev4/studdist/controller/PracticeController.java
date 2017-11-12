@@ -1,12 +1,12 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
-import com.netcracker.devschool.dev4.studdist.utils.Event;
-import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
-import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import com.netcracker.devschool.dev4.studdist.entity.Practice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.service.*;
+import com.netcracker.devschool.dev4.studdist.utils.Event;
+import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
+import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -70,11 +70,15 @@ public class PracticeController {
     @RequestMapping(value = "/tableForPractice/{id}", method = RequestMethod.GET)
     @ResponseBody
     private TableData   returnTable(@PathVariable String id,
-                                  @RequestParam(value = "start") String start,
-                                  @RequestParam(value = "length") String length,
-                                  @RequestParam(value = "draw") String draw) {
-        List<Student> list = studentService.findByParams(Integer.parseInt(id), "", "fname", "asc", Integer.parseInt(start), Integer.parseInt(length));
+                                    @RequestParam(value = "start") String start,
+                                    @RequestParam(value = "length") String length,
+                                    @RequestParam(value = "draw") String draw,
+                                    @RequestParam(value = "search[value]", required = false) String key,
+                                    @RequestParam(value = "order[0][column]") String order,
+                                    @RequestParam(value = "order[0][dir]") String orderDir) {
+        if (key == null) key = "";
         TableData result = new TableData();
+        List<Student> list = studentService.findByParams(Integer.parseInt(id), key, result.getColumnNameForTables(Integer.parseInt(order)), orderDir, Integer.parseInt(start), Integer.parseInt(length));
         result.setDraw(Integer.parseInt(draw));
         StudentsConverter converter = new StudentsConverter();
         for (Student item: list
