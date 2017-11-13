@@ -22,6 +22,8 @@
             $('#fileupload').ajaxForm({
                 success: function (data) {
                     $('#user_avatar').attr("src", "images/" + data.imageUrl);
+                    $('#picture_upload').modal("hide");
+
                 }
             });
 
@@ -134,6 +136,9 @@
                     } else {
                         $('#error').css('display', 'block');
                     }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    $('#error').css('display', 'block');
                 }
             });
             $.validate({

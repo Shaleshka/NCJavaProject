@@ -120,7 +120,7 @@
                 'ordering': true,
                 'info': true,
                 'autoWidth': false
-            })
+            });
             $.validate({
                 lang: 'ru'
             });
@@ -248,63 +248,6 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td>Андрей</td>
-                                                    <td>Даниленко</td>
-                                                    <td>ФКП</td>
-                                                    <td>ПМС</td>
-                                                    <td>513803</td>
-                                                    <td>-4</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-default"
-                                                                data-toggle="modal" data-target="#modal-default">
-                                                            Назначить
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-block btn-primary">
-                                                            Редактировать
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Костя</td>
-                                                    <td>Новичук</td>
-                                                    <td>ФКП</td>
-                                                    <td>ПМС</td>
-                                                    <td>513803</td>
-                                                    <td>-3</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-default"
-                                                                data-toggle="modal" data-target="#modal-default">
-                                                            Назначить
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-block btn-primary">
-                                                            Редактировать
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Евгений</td>
-                                                    <td>Шнейдеров</td>
-                                                    <td>ФКП</td>
-                                                    <td>ИСИТ(БМ)</td>
-                                                    <td>514301</td>
-                                                    <td>9.5</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-default"
-                                                                data-toggle="modal" data-target="#modal-default">
-                                                            Назначить
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-block btn-primary">
-                                                            Редактировать
-                                                        </button>
-                                                    </td>
-                                                </tr>
                                                 </tbody>
                                                 <tfoot>
                                                 <tr>
