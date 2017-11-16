@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
+
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("select l from Student l where l.id in (select p.studentId from Assignment " +
@@ -20,7 +22,13 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
             "Speciality s where s.id = l.specialityId)) like concat('%', :skey, '%') ")
     Page<Student> findWithoutPracticeId(@Param("skey") String key,  Pageable page);
 
-    @Query("select l from Student l where l.facultyId = :fid and l.specialityId = :sid and l.avgScore >= :minavg")
-    Page<Student> findForRequest(@Param("fid") int fid, @Param("sid") int sid, @Param("minavg") double minavg, Pageable page);
+    @Query("select l from Student l where l.facultyId = :fid and l.specialityId = :sid and l.avgScore >= :minavg and " +
+            "l.isBudget = :budget and not exists (select p from Practice p where p.id in (select a.practiceId from Assignment a where " +
+            "a.studentId = l.id) and ((:start between p.start and p.end) or (:endd between p.start and p.end)))")
+    Page<Student> findForRequest(@Param("fid") int fid, @Param("sid") int sid,
+                                 @Param("start") Date start,
+                                 @Param("endd") Date end,
+                                 @Param("budget") int budget,
+                                 @Param("minavg") double minavg, Pageable page);
 
 }

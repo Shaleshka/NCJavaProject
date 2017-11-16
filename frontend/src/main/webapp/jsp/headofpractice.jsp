@@ -110,16 +110,17 @@
             $.validate({
                 lang: 'ru'
             });
+            $('#reservation').daterangepicker();
             oTable = $('#tstudents').DataTable({
                 "processing": true,
                 "serverSide": true,
                 'autoWidth': false,
                 "ajax": "practice/tableForRequest/" + getFacultiesVal() + "/" +
-                getSpecialityVal() + "?minavg=" + getMinAvgVal()
+                getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget()
             });
             $('#request').change(function () {
                 oTable.ajax.url("practice/tableForRequest/" + getFacultiesVal() + "/" +
-                    getSpecialityVal() + "?minavg=" + getMinAvgVal());
+                    getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget());
                 oTable.draw();
             })
         }
@@ -140,6 +141,14 @@
             var result = $('#mivavg').val();
             if (result === null || result === "" || result < 4 || result > 10) result = 4.0;
             return result;
+        }
+
+        function getIsBudget() {
+            if ($('#budget').is(":checked")) return "1"; else return "0";
+        }
+
+        function getDate() {
+            return $('#reservation').val();
         }
 
 
@@ -286,7 +295,7 @@
 
                                     <div class="form-group">
                                         <label>
-                                            <input name="isBudget" type="checkbox">
+                                            <input name="isBudget" id="budget" type="checkbox">
                                             Бюджетник
                                         </label>
                                     </div>
@@ -359,7 +368,6 @@
         $('[data-mask]').inputmask();
 
         //Date range picker
-        $('#reservation').daterangepicker();
         //Date range picker with time picker
         $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
         //Date range as a button

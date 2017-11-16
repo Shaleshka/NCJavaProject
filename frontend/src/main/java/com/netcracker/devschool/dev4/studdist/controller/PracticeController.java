@@ -98,6 +98,8 @@ public class PracticeController {
     private TableData tableForRequest(@PathVariable(value = "facultyId") String facultyId,
                                       @PathVariable(value = "specialityId") String specialityId,
                                       @RequestParam(value = "minavg") String minAvg,
+                                      @RequestParam(value = "date") String date,
+                                      @RequestParam(value = "budget") String budget,
                                       @RequestParam(value = "start") String start,
                                       @RequestParam(value = "length") String length,
                                       @RequestParam(value = "draw") String draw,
@@ -105,7 +107,19 @@ public class PracticeController {
                                       @RequestParam(value = "order[0][dir]") String orderDir) {
         TableData result = new TableData();
         double avg = Double.parseDouble(minAvg);
-        Page<Student> page = studentService.findForRequest(Integer.parseInt(facultyId), Integer.parseInt(specialityId), avg, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        String[] dates = date.split(" - ");
+
+        Date startd, end;
+
+        DateFormat format = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
+        try {
+            startd = format.parse(dates[0]);
+            end = format.parse(dates[1]);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        Page<Student> page = studentService.findForRequest(Integer.parseInt(facultyId), Integer.parseInt(specialityId), startd, end, Integer.parseInt(budget), avg, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
         List<Student> list = page.getContent();
         result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
         result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());

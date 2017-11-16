@@ -214,6 +214,7 @@ public class MainController {
             student.setAvgScore(avg);
             student.setFacultyId(faculty);
             student.setSpecialityId(speciality);
+            student.setIsBudget(isBudget);
             student.setCourse(8 - speciality / 100000);
             studentService.create(student);
         }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -55,9 +56,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Page<Student> findForRequest(int facultyId, int specialityId, double minAvg, String sortBy, String order, int start, int length) {
+    public Page<Student> findForRequest(int facultyId, int specialityId, Date startdate, Date enddate, int isbudget, double minAvg, String sortBy, String order, int start, int length) {
         PageRequest pageR = new PageRequest(start / length, length, Sort.Direction.fromString(order), sortBy);
-        Page<Student> result = studentRepository.findForRequest(facultyId, specialityId, minAvg, pageR);
+        Page<Student> result = studentRepository.findForRequest(facultyId, specialityId, startdate, enddate, isbudget, minAvg, pageR);
         return result;
     }
 
