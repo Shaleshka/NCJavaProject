@@ -11,14 +11,13 @@
 <!-- Bootstrap 3.3.7 -->
 <script src="resources/js/libs/bootstrap.min.js"></script>
 <!-- iCheck -->
-<script src="resources/js/libs/icheck.min.js"></script>
 <!-- date-range-picker -->
 <script src="resources/js/libs/moment.min.js"></script>
 <script src="resources/js/libs/daterangepicker.js"></script>
 <!-- DataTables -->
 <script>
     $(function () {
-        $('input').iCheck({
+        $('input[type="checkbox"]').iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' // optional

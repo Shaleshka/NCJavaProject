@@ -42,3 +42,4 @@
 
 <script src="resources/js/libs/jquery.dataTables.min.js"></script>
 <script src="resources/js/libs/dataTables.bootstrap.min.js"></script>
+<script src="resources/js/libs/icheck.min.js"></script>

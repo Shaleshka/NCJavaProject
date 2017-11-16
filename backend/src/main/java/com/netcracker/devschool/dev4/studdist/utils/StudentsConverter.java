@@ -28,7 +28,7 @@ public class StudentsConverter {
         System.arraycopy(studentToStringArray(student, facultyName, specialityName), 0, result, offset, 6);
         if (chekbox) {
             result[0] = "<label>\n" +
-                    "                                            <input name=\"isBudget\" type=\"checkbox\">\n" +
+                    "                                            <input name=\"isBudget\" class=\"" + i + "table_cb" + "\" id=\"cb" + student.getId() + "\" type=\"checkbox\">\n" +
                     "                                            \n" +
                     "                                        </label>\n";
         }

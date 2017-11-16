@@ -21,6 +21,8 @@
 
         var oTable;
 
+        var selected = [];
+
         function appendPractice(index, value) {
             $('#practices').append('<div class="panel box box-primary">\n' +
                 '                                        <div class="box-header with-border">\n' +
@@ -116,13 +118,38 @@
                 "serverSide": true,
                 'autoWidth': false,
                 "ajax": "practice/tableForRequest/" + getFacultiesVal() + "/" +
-                getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget()
+                getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget(),
+                "rowCallback": function (row, data) {
+                    var cb = $(row).find('td:nth-child(1) > label > input[type="checkbox"]');
+                    if ($.inArray(cb.attr('id'), selected) !== -1) {
+                        cb.iCheck('check');
+                    }
+                },
+                "drawCallback": function () {
+                    $('input[type="checkbox"]').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('input[type="checkbox"]').on('ifChecked', function () {
+                        var id = this.id;
+                        var index = $.inArray(id, selected);
+
+                        if (index === -1) {
+                            selected.push(id);
+                        } else {
+                            selected.splice(index, 1);
+                        }
+                    });
+
+                }
             });
             $('#request').change(function () {
                 oTable.ajax.url("practice/tableForRequest/" + getFacultiesVal() + "/" +
                     getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget());
                 oTable.draw();
-            })
+            });
+
         }
 
         function getFacultiesVal() {
