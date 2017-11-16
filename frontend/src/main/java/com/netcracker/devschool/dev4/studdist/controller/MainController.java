@@ -40,12 +40,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Random;
 
 /**
  * @author anpi0316
- *         Date: 06.10.2017
- *         Time: 14:04
+ * Date: 06.10.2017
+ * Time: 14:04
  */
 @Controller
 public class MainController {
@@ -140,7 +140,7 @@ public class MainController {
             model.addObject("name", headOfPractice.getFname() + " " + headOfPractice.getLname());
             model.addObject("imageUrl", "images/" + headOfPractice.getImageUrl());
             model.addObject("company", headOfPractice.getCompanyName());
-            model.addObject("id",id);
+            model.addObject("id", id);
             model.addObject("faculties", facultyService.findAll());
         }
         model.setViewName("headofpractice");
@@ -151,11 +151,74 @@ public class MainController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView pageAdmin() {
         ModelAndView model = new ModelAndView();
-        model.addObject("faculties",facultyService.findAll());
-        model.addObject("specialities",specialityService.findAll());
+        model.addObject("faculties", facultyService.findAll());
+        model.addObject("specialities", specialityService.findAll());
         List<Faculty> list = facultyService.findAll();
         model.setViewName("admin");
         return model;
+    }
+
+    @RequestMapping(value = "/admin/createRandom", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<Student> createStudents() {
+        final String[] fnamesM = {"Александр", "Андрей", "Алексей", "Борис", "Владимир", "Владислав", "Валентин",
+                "Георгий", "Геннадий", "Дмитрий", "Егор", "Иван", "Константин", "Кирилл", "Леонид",
+                "Максим", "Никита", "Николай", "Олег", "Пётр", "Руслан", "Сергей", "Степан",
+                "Тимур", "Фёдор"};
+        final String[] fnamesW = {"Александра", "Алина", "Анна", "Анастасия", "Валерия", "Ваврвара", "Вероника",
+                "Галина", "Дарья", "Елена", "Елизавета", "Ирина", "Карина", "Ксения", "Маргарита", "Наталья",
+                "Оксана", "Ольга", "Полина", "Светлана", "София", "Татьяна", "Юлия"};
+        final String[] lnamesM = {"Зинкевич", "Филипенко", "Скворцов", "Полищук", "Полещук", "Гончарук", "Высоцкий",
+                "Пилипенко", "Зенкевич", "Лукашевич", "Корбут", "Любич", "Ярмолович", "Лозинский", "Басинский",
+                "Голубовский", "Захаревич", "Смоляк", "Владомирский", "Янукович", "Ивашкевич", "Ананич", "Хруцкий",
+                "Санько", "Виленский", "Мошковский", "Балицкий", "Мисюк", "Янушкевич", "Кондратович"};
+        final String[] lnamesW = {"Зинкевич", "Филипенко", "Скворцова", "Полищук", "Полещук", "Гончарук", "Высоцкая",
+                "Пилипенко", "Зенкевич", "Лукашевич", "Корбут", "Любич", "Ярмолович", "Лозинская", "Басинская",
+                "Голубовская", "Захаревич", "Смоляк", "Владомирская", "Янукович", "Ивашкевич", "Ананич", "Хруцкая",
+                "Санько", "Виленская", "Мошковская", "Балицкая", "Мисюк", "Янушкевич", "Кондратович"};
+        for (int i = 0; i < 5000; i++) {
+            Random random = new Random();
+            int sex = random.nextInt(2);
+            String fname;
+            String lname;
+            if (sex == 1) {
+                fname = fnamesM[random.nextInt(25)];
+                lname = lnamesM[random.nextInt(30)];
+            } else {
+                fname = fnamesW[random.nextInt(23)];
+                lname = lnamesW[random.nextInt(30)];
+            }
+            int speciality = random.nextInt(36) + 1;
+            int faculty = specialityService.findById(speciality).getFacultyId();
+            int group = (random.nextInt(7) + 1) * 100000 + faculty * 10000 + speciality * 100 + random.nextInt(3);
+            int isBudget = random.nextInt(2);
+            double avg = random.nextDouble() * 6 + 4;
+
+            String username = "student" + (i) + "@bsuir.by";
+
+            User user = new User();
+            user.setUsername(username);
+            String password = org.apache.commons.codec.digest.DigestUtils.sha256Hex("123456");
+            user.setPassword(password);
+            user.setEnabled(1);
+            UserRoles userRoles = new UserRoles();
+            userRoles.setUsername(username);
+            userRoles.setRole("ROLE_STUDENT");
+            int id = userService.create(user, userRoles).getUser_role_id();
+            Student student = new Student();
+            student.setId(id);
+            student.setFname(fname);
+            student.setLname(lname);
+            student.setImageUrl("student_default_avatar.png");
+            student.setGroup(group);
+            student.setAvgScore(avg);
+            student.setFacultyId(faculty);
+            student.setSpecialityId(speciality);
+            student.setCourse(8 - speciality / 100000);
+            studentService.create(student);
+        }
+
+        return studentService.findAll();
     }
 
     //for 403 access denied page

@@ -7,6 +7,7 @@ import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,7 +114,10 @@ public class StudentsController {
             @RequestParam(value = "order[0][dir]") String orderDir) {
         if (key==null) key="";
         TableData result = new TableData();
-        List<Student> list = studentService.findByParams(-1, key, result.getColumnNameForTables(Integer.parseInt(order)), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        Page<Student> page = studentService.findByParams(-1, key, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        List<Student> list = page.getContent();
+        result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
+        result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());
         result.setDraw(Integer.parseInt(draw));
         StudentsConverter converter = new StudentsConverter();
         for (Student item: list

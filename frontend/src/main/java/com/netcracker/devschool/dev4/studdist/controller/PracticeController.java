@@ -8,6 +8,7 @@ import com.netcracker.devschool.dev4.studdist.utils.Event;
 import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -78,7 +79,10 @@ public class PracticeController {
                                     @RequestParam(value = "order[0][dir]") String orderDir) {
         if (key == null) key = "";
         TableData result = new TableData();
-        List<Student> list = studentService.findByParams(Integer.parseInt(id), key, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        Page<Student> page = studentService.findByParams(Integer.parseInt(id), key, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        List<Student> list = page.getContent();
+        result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
+        result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());
         result.setDraw(Integer.parseInt(draw));
         StudentsConverter converter = new StudentsConverter();
         for (Student item: list
@@ -101,7 +105,10 @@ public class PracticeController {
                                       @RequestParam(value = "order[0][dir]") String orderDir) {
         TableData result = new TableData();
         double avg = Double.parseDouble(minAvg);
-        List<Student> list = studentService.findForRequest(Integer.parseInt(facultyId), Integer.parseInt(specialityId), avg, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        Page<Student> page = studentService.findForRequest(Integer.parseInt(facultyId), Integer.parseInt(specialityId), avg, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        List<Student> list = page.getContent();
+        result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
+        result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());
         result.setDraw(Integer.parseInt(draw));
         StudentsConverter converter = new StudentsConverter();
         for (Student item : list

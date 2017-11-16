@@ -42,8 +42,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findByParams(int practiceId, String searchKey, String sortBy, String order, int start, int length) {
-        PageRequest pageR = new PageRequest(start, length, Sort.Direction.fromString(order), sortBy);
+    public Page<Student> findByParams(int practiceId, String searchKey, String sortBy, String order, int start, int length) {
+        PageRequest pageR = new PageRequest(start / length, length, Sort.Direction.fromString(order), sortBy);
         Page<Student> result;
         if (practiceId!=-1) {
             result = studentRepository.findWithPracticeId(practiceId, searchKey, pageR);
@@ -51,14 +51,14 @@ public class StudentServiceImpl implements StudentService {
         else {
             result = studentRepository.findWithoutPracticeId(searchKey, pageR);
         }
-        return result.getContent();
+        return result;
     }
 
     @Override
-    public List<Student> findForRequest(int facultyId, int specialityId, double minAvg, String sortBy, String order, int start, int length) {
-        PageRequest pageR = new PageRequest(start, length, Sort.Direction.fromString(order), sortBy);
+    public Page<Student> findForRequest(int facultyId, int specialityId, double minAvg, String sortBy, String order, int start, int length) {
+        PageRequest pageR = new PageRequest(start / length, length, Sort.Direction.fromString(order), sortBy);
         Page<Student> result = studentRepository.findForRequest(facultyId, specialityId, minAvg, pageR);
-        return result.getContent();
+        return result;
     }
 
     @Override
