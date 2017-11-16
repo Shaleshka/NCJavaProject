@@ -55,6 +55,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> findForRequest(int facultyId, int specialityId, double minAvg, String sortBy, String order, int start, int length) {
+        PageRequest pageR = new PageRequest(start, length, Sort.Direction.fromString(order), sortBy);
+        Page<Student> result = studentRepository.findForRequest(facultyId, specialityId, minAvg, pageR);
+        return result.getContent();
+    }
+
+    @Override
     @Transactional
     public Student update(Student student) throws Exception {
         Student updated = studentRepository.findOne(student.getId());

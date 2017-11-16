@@ -38,24 +38,28 @@
                 '                                                    <table id="practice_' + value.id + '" class="table table-bordered table-striped">\n' +
                 '                                                        <thead>\n' +
                 '                                                        <tr>\n' +
+                '                                                            <th> </th>\n' +
                 '                                                            <th>Имя</th>\n' +
                 '                                                            <th>Фамилия</th>\n' +
                 '                                                            <th>Факультет</th>\n' +
                 '                                                            <th>Специальность</th>\n' +
                 '                                                            <th>Группа</th>\n' +
                 '                                                            <th>Средний балл</th>\n' +
+                '                                                            <th>Удалить</th>\n' +
                 '                                                        </tr>\n' +
                 '                                                        </thead>\n' +
                 '                                                        <tbody>\n' +
                 '                                                        </tbody>\n' +
                 '                                                        <tfoot>\n' +
                 '                                                        <tr>\n' +
+                '                                                            <th> </th>\n' +
                 '                                                            <th>Имя</th>\n' +
                 '                                                            <th>Фамилия</th>\n' +
                 '                                                            <th>Факультет</th>\n' +
                 '                                                            <th>Специальность</th>\n' +
                 '                                                            <th>Группа</th>\n' +
                 '                                                            <th>Средний балл</th>\n' +
+                '                                                            <th>Удалить</th>\n' +
                 '                                                        </tr>\n' +
                 '                                                        </tfoot>\n' +
                 '                                                    </table>\n' +
@@ -223,6 +227,12 @@
                         <div class="box box-solid">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Студенты</h3>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-default"
+                                            data-toggle="modal" data-target="#new-faculty">
+                                        Добавить студента
+                                    </button>
+                                </div>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -237,28 +247,30 @@
                                             <table id="tstudents" class="table table-bordered table-striped">
                                                 <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th>Имя</th>
                                                     <th>Фамилия</th>
                                                     <th>Факультет</th>
                                                     <th>Специальность</th>
                                                     <th>Группа</th>
                                                     <th>Средний балл</th>
-                                                    <th>Назначение</th>
                                                     <th>Редактирование</th>
+                                                    <th>Удаление</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 </tbody>
                                                 <tfoot>
                                                 <tr>
+                                                    <th></th>
                                                     <th>Имя</th>
                                                     <th>Фамилия</th>
                                                     <th>Факультет</th>
                                                     <th>Специальность</th>
                                                     <th>Группа</th>
                                                     <th>Средний балл</th>
-                                                    <th>Назначение</th>
                                                     <th>Редактирование</th>
+                                                    <th>Удаление</th>
                                                 </tr>
                                                 </tfoot>
                                             </table>

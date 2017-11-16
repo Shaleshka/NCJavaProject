@@ -119,7 +119,8 @@ public class StudentsController {
         for (Student item: list
                 ) {
             //passing services is temporary fix, todo: make this somehow normal
-            result.addData(converter.studentToStringArrayAdvanced(item,facultyService,specialityService));
+            result.addData(converter.studentToStringArray(item, facultyService.findById(item.getFacultyId()).getName(),
+                    specialityService.findById(item.getSpecialityId()).getName(), true, true, true));
         }
         return result;
     }

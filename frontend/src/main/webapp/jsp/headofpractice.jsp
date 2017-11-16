@@ -19,6 +19,8 @@
     <script>
         var id = '${id}';
 
+        var oTable;
+
         function appendPractice(index, value) {
             $('#practices').append('<div class="panel box box-primary">\n' +
                 '                                        <div class="box-header with-border">\n' +
@@ -38,24 +40,28 @@
                 '                                                    <table id="practice_' + value.id + '" class="table table-bordered table-striped">\n' +
                 '                                                        <thead>\n' +
                 '                                                        <tr>\n' +
+                '                                                            <th> </th>\n' +
                 '                                                            <th>Имя</th>\n' +
                 '                                                            <th>Фамилия</th>\n' +
                 '                                                            <th>Факультет</th>\n' +
                 '                                                            <th>Специальность</th>\n' +
                 '                                                            <th>Группа</th>\n' +
                 '                                                            <th>Средний балл</th>\n' +
+                '                                                            <th>Удалить</th>\n' +
                 '                                                        </tr>\n' +
                 '                                                        </thead>\n' +
                 '                                                        <tbody>\n' +
                 '                                                        </tbody>\n' +
                 '                                                        <tfoot>\n' +
                 '                                                        <tr>\n' +
+                '                                                            <th> </th>\n' +
                 '                                                            <th>Имя</th>\n' +
                 '                                                            <th>Фамилия</th>\n' +
                 '                                                            <th>Факультет</th>\n' +
                 '                                                            <th>Специальность</th>\n' +
                 '                                                            <th>Группа</th>\n' +
                 '                                                            <th>Средний балл</th>\n' +
+                '                                                            <th>Удалить</th>\n' +
                 '                                                        </tr>\n' +
                 '                                                        </tfoot>\n' +
                 '                                                    </table>\n' +
@@ -81,7 +87,9 @@
                 url: 'practice/getByHop/' + id,
                 dataType: 'json',
                 success: function (data) {
-                    $.each(data, function (index, value) {appendPractice(index, value)});
+                    $.each(data, function (index, value) {
+                        appendPractice(index, value)
+                    });
                 }
             });
             $('#faculties').on('change', function () {
@@ -102,7 +110,39 @@
             $.validate({
                 lang: 'ru'
             });
+            oTable = $('#tstudents').DataTable({
+                "processing": true,
+                "serverSide": true,
+                'autoWidth': false,
+                "ajax": "practice/tableForRequest/" + getFacultiesVal() + "/" +
+                getSpecialityVal() + "?minavg=" + getMinAvgVal()
+            });
+            $('#request').change(function () {
+                oTable.ajax.url("practice/tableForRequest/" + getFacultiesVal() + "/" +
+                    getSpecialityVal() + "?minavg=" + getMinAvgVal());
+                oTable.draw();
+            })
         }
+
+        function getFacultiesVal() {
+            var result = $('#faculties').val();
+            if (result === null) result = 1;
+            return result;
+        }
+
+        function getSpecialityVal() {
+            var result = $('#specs').val();
+            if (result === null) result = 1;
+            return result;
+        }
+
+        function getMinAvgVal() {
+            var result = $('#mivavg').val();
+            if (result === null || result === "" || result < 4 || result > 10) result = 4.0;
+            return result;
+        }
+
+
 
         function refreshSpecialities(id, val) {
             $.ajax({
@@ -200,12 +240,14 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <form role="form" id="request" action="practice/addRequest" method="post">
+                                <form role="form" id="request" action="practice/addRequest"
+                                      method="post">
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Название практики</label>
                                         <input data-validation="length letternumeric" data-validation-length="2-45"
-                                               type="text" class="form-control" name="name" placeholder="Введите имя...">
+                                               type="text" class="form-control" name="name"
+                                               placeholder="Введите имя...">
                                     </div>
                                     <div class="form-group">
                                         <label for="reservation">Дата практики:</label>
@@ -213,7 +255,8 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" name="daterange" class="form-control pull-right" id="reservation">
+                                            <input type="text" name="daterange" class="form-control pull-right"
+                                                   id="reservation">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -252,7 +295,8 @@
                                         <label>Минимальный средний балл</label>
                                         <input data-validation="number" data-validation-allowing="range[4.0;10.0],float"
                                                data-validation-error-msg="Значение выходит за диапазон возможных оценок"
-                                               type="text" name="minAvg" class="form-control" placeholder="Введите ср. балл...">
+                                               type="text" name="minAvg" id="mivavg" class="form-control"
+                                               placeholder="Введите ср. балл...">
                                     </div>
                                     <input type="hidden" name="${_csrf.parameterName}"
                                            value="${_csrf.token}"/>
@@ -260,6 +304,33 @@
                                         <button type="submit" class="btn btn-primary">Создать</button>
                                     </div>
                                 </form>
+                                <table id="tstudents" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Имя</th>
+                                        <th>Фамилия</th>
+                                        <th>Факультет</th>
+                                        <th>Специальность</th>
+                                        <th>Группа</th>
+                                        <th>Средний балл</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Выбрать</th>
+                                        <th>Имя</th>
+                                        <th>Фамилия</th>
+                                        <th>Факультет</th>
+                                        <th>Специальность</th>
+                                        <th>Группа</th>
+                                        <th>Средний балл</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                             <!-- /.box-body -->
                         </div>
@@ -309,18 +380,6 @@
                 $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
             }
         )
-    })
-</script>
-<script>
-    $(function () {
-        $('#example1').DataTable({
-            'paging': true,
-            'lengthChange': false,
-            'searching': true,
-            'ordering': true,
-            'info': true,
-            'autoWidth': false
-        })
     })
 </script>
 </body>

@@ -39,3 +39,6 @@
 <script src="resources/js/libs/jquery.inputmask.extensions.js"></script>
 
 <script src="resources/js/libs/jquery.form-validator.min.js"></script>
+
+<script src="resources/js/libs/jquery.dataTables.min.js"></script>
+<script src="resources/js/libs/dataTables.bootstrap.min.js"></script>

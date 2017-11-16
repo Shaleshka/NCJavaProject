@@ -1,37 +1,49 @@
 package com.netcracker.devschool.dev4.studdist.utils;
 
-import com.netcracker.devschool.dev4.studdist.entity.Faculty;
-import com.netcracker.devschool.dev4.studdist.entity.Speciality;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
-import com.netcracker.devschool.dev4.studdist.service.FacultyService;
-import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
-
-import java.util.Arrays;
 
 public class StudentsConverter {
 
-    public String[] studentToStringArray(Student student, FacultyService facultyService, SpecialityService specialityService) {
+    private String[] studentToStringArray(Student student, String facultyName, String specialityName) {
         String[] result = new String[6];
         result[0] = student.getFname();
         result[1] = student.getLname();
-        Faculty faculty = facultyService.findById(student.getFacultyId());
-        if (faculty != null) result[2] = faculty.getName(); else result[2]="undefined";
-        Speciality speciality = specialityService.findById(student.getSpecialityId());
-        if (speciality != null) result[3] = speciality.getName(); else result[3]="undefined";
+        result[2] = facultyName;
+        result[3] = specialityName;
         result[4] = String.valueOf(student.getGroup());
         result[5] = String.valueOf(student.getAvgScore());
         return result;
     }
 
-    public String[] studentToStringArrayAdvanced(Student student, FacultyService facultyService, SpecialityService specialityService) {
-        String[] result = new String[8];
-        result = Arrays.copyOf(studentToStringArray(student,facultyService,specialityService),8);
-        result[6]="<button type=\"button\" class=\"btn btn-default\" onclick=\"assignStudent("+student.getId()+")\">\n" +
-                "                                                            Назначить\n" +
-                "                                                        </button>";
-        result[7]="<button type=\"button\" class=\"btn btn-primary\" onclick=\"editStudent("+student.getId()+")\">\n" +
-                "                                                            Редактировать\n" +
-                "                                                        </button>";
+    public String[] studentToStringArray(Student student, String facultyName, String specialityName,
+                                         boolean chekbox, boolean deleteButton, boolean editButton) {
+        int i = 0, offset = 0;
+        if (chekbox) {
+            i++;
+            offset++;
+        }
+        if (deleteButton) i++;
+        if (editButton) i++;
+        String[] result = new String[6 + i];
+        System.arraycopy(studentToStringArray(student, facultyName, specialityName), 0, result, offset, 6);
+        if (chekbox) {
+            result[0] = "<label>\n" +
+                    "                                            <input name=\"isBudget\" type=\"checkbox\">\n" +
+                    "                                            \n" +
+                    "                                        </label>\n";
+        }
+        i = offset + 6;
+        if (editButton) {
+            result[i] = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"editStudent(6)\">\n" +
+                    "                                                            Редактировать\n" +
+                    "                                                        </button>";
+            i++;
+        }
+        if (deleteButton) {
+            result[i] = "<button type=\"button\" class=\"btn btn-danger\" onclick=\"delStudent(6)\">\n" +
+                    "                                                            Удалить\n" +
+                    "                                                        </button>";
+        }
         return result;
     }
 

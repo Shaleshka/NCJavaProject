@@ -78,13 +78,36 @@ public class PracticeController {
                                     @RequestParam(value = "order[0][dir]") String orderDir) {
         if (key == null) key = "";
         TableData result = new TableData();
-        List<Student> list = studentService.findByParams(Integer.parseInt(id), key, result.getColumnNameForTables(Integer.parseInt(order)), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        List<Student> list = studentService.findByParams(Integer.parseInt(id), key, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
         result.setDraw(Integer.parseInt(draw));
         StudentsConverter converter = new StudentsConverter();
         for (Student item: list
-             ) {
-            //passing services is temporary fix, todo: make this somehow normal
-            result.addData(converter.studentToStringArray(item,facultyService,specialityService));
+                ) {
+            result.addData(converter.studentToStringArray(item, facultyService.findById(item.getFacultyId()).getName(),
+                    specialityService.findById(item.getSpecialityId()).getName(), true, true, false));
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/tableForRequest/{facultyId}/{specialityId}", method = RequestMethod.GET)
+    @ResponseBody
+    private TableData tableForRequest(@PathVariable(value = "facultyId") String facultyId,
+                                      @PathVariable(value = "specialityId") String specialityId,
+                                      @RequestParam(value = "minavg") String minAvg,
+                                      @RequestParam(value = "start") String start,
+                                      @RequestParam(value = "length") String length,
+                                      @RequestParam(value = "draw") String draw,
+                                      @RequestParam(value = "order[0][column]") String order,
+                                      @RequestParam(value = "order[0][dir]") String orderDir) {
+        TableData result = new TableData();
+        double avg = Double.parseDouble(minAvg);
+        List<Student> list = studentService.findForRequest(Integer.parseInt(facultyId), Integer.parseInt(specialityId), avg, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        result.setDraw(Integer.parseInt(draw));
+        StudentsConverter converter = new StudentsConverter();
+        for (Student item : list
+                ) {
+            result.addData(converter.studentToStringArray(item, facultyService.findById(item.getFacultyId()).getName(),
+                    specialityService.findById(item.getSpecialityId()).getName(), true, false, false));
         }
         return result;
     }
