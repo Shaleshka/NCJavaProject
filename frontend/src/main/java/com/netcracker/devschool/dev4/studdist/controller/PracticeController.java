@@ -9,9 +9,6 @@ import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,19 +41,19 @@ public class PracticeController {
 
     @RequestMapping(value = "/getByHop/{id}", method = RequestMethod.GET)
     @ResponseBody
-    private List<Practice> getByHopId(@PathVariable String id) {
+    public List<Practice> getByHopId(@PathVariable String id) {
         return practiceService.findByHopId(Integer.parseInt(id));
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @ResponseBody
-    private List<Practice> getAll() {
+    public List<Practice> getAll() {
         return practiceService.findAll();
     }
 
     @RequestMapping(value = "/getByStudent/{id}", method = RequestMethod.GET)
     @ResponseBody
-    private List<Event> getByStudentId(@PathVariable String id) {
+    public List<Event> getByStudentId(@PathVariable String id) {
         List<Practice> list = practiceService.findByStudentId(Integer.parseInt(id));
         List<Event> events = new ArrayList<>();
         for (Practice item : list) {
@@ -70,13 +67,13 @@ public class PracticeController {
 
     @RequestMapping(value = "/tableForPractice/{id}", method = RequestMethod.GET)
     @ResponseBody
-    private TableData   returnTable(@PathVariable String id,
-                                    @RequestParam(value = "start") String start,
-                                    @RequestParam(value = "length") String length,
-                                    @RequestParam(value = "draw") String draw,
-                                    @RequestParam(value = "search[value]", required = false) String key,
-                                    @RequestParam(value = "order[0][column]") String order,
-                                    @RequestParam(value = "order[0][dir]") String orderDir) {
+    public TableData returnTable(@PathVariable String id,
+                                 @RequestParam(value = "start") String start,
+                                 @RequestParam(value = "length") String length,
+                                 @RequestParam(value = "draw") String draw,
+                                 @RequestParam(value = "search[value]", required = false) String key,
+                                 @RequestParam(value = "order[0][column]") String order,
+                                 @RequestParam(value = "order[0][dir]") String orderDir) {
         if (key == null) key = "";
         TableData result = new TableData();
         Page<Student> page = studentService.findByParams(Integer.parseInt(id), key, result.getColumnNameForTables(Integer.parseInt(order) - 1), orderDir, Integer.parseInt(start), Integer.parseInt(length));
@@ -95,16 +92,16 @@ public class PracticeController {
 
     @RequestMapping(value = "/tableForRequest/{facultyId}/{specialityId}", method = RequestMethod.GET)
     @ResponseBody
-    private TableData tableForRequest(@PathVariable(value = "facultyId") String facultyId,
-                                      @PathVariable(value = "specialityId") String specialityId,
-                                      @RequestParam(value = "minavg") String minAvg,
-                                      @RequestParam(value = "date") String date,
-                                      @RequestParam(value = "budget") String budget,
-                                      @RequestParam(value = "start") String start,
-                                      @RequestParam(value = "length") String length,
-                                      @RequestParam(value = "draw") String draw,
-                                      @RequestParam(value = "order[0][column]") String order,
-                                      @RequestParam(value = "order[0][dir]") String orderDir) {
+    public TableData tableForRequest(@PathVariable(value = "facultyId") String facultyId,
+                                     @PathVariable(value = "specialityId") String specialityId,
+                                     @RequestParam(value = "minavg") String minAvg,
+                                     @RequestParam(value = "date") String date,
+                                     @RequestParam(value = "budget") String budget,
+                                     @RequestParam(value = "start") String start,
+                                     @RequestParam(value = "length") String length,
+                                     @RequestParam(value = "draw") String draw,
+                                     @RequestParam(value = "order[0][column]") String order,
+                                     @RequestParam(value = "order[0][dir]") String orderDir) {
         TableData result = new TableData();
         double avg = Double.parseDouble(minAvg);
         String[] dates = date.split(" - ");
@@ -133,16 +130,17 @@ public class PracticeController {
         return result;
     }
 
-    @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
+    @RequestMapping(value = "/addRequest/{id}", method = RequestMethod.POST)
     @ResponseBody
-    @PreAuthorize("hasAnyAuthority('ROLE_HOP', 'ROLE_ADMIN')")
-    private Practice addPractice(@RequestParam(value = "name") String name,
-                                 @RequestParam(value = "daterange") String daterange,
-                                 @RequestParam(value = "number") String number,
-                                 @RequestParam(value = "faculty") String faculty,
-                                 @RequestParam(value = "speciality") String speciality,
-                                 @RequestParam(value = "isBudget") String isBudget,
-                                 @RequestParam(value = "minAvg") String minAvg) {
+    public Practice addPractice(@PathVariable(value = "id") String id,
+                                @RequestParam(value = "name") String name,
+                                @RequestParam(value = "daterange") String daterange,
+                                @RequestParam(value = "number") String number,
+                                @RequestParam(value = "faculty") String faculty,
+                                @RequestParam(value = "speciality") String speciality,
+                                @RequestParam(value = "isBudget", required = false) String isBudget,
+                                @RequestParam(value = "minAvg") String minAvg,
+                                @RequestParam(value = "checked[]", required = false) String[] checked) {
         //todo validation
         Practice practice = new Practice();
         practice.setName(name);
@@ -164,12 +162,22 @@ public class PracticeController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        practice.setHopId(Integer.parseInt(id));
+        Practice result = practiceService.create(practice);
+        for (String item : checked) {
+            int sid = Integer.parseInt(item.substring(2));
+            practiceService.assign(result.getId(), sid);
+        }
+        return result;
+    }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        int id = userService.getIdByName(uname);
-        practice.setHopId(id);
-        return practiceService.create(practice);
+    @RequestMapping(value = "/remove/{id}/{studid}", method = RequestMethod.GET)
+    @ResponseBody
+    public Student removeFromPractice(@PathVariable(value = "id") String id,
+                                      @PathVariable(value = "studid") String studid) {
+        if (studentService.findById(Integer.parseInt(studid)) != null)
+            return practiceService.removeFromPractice(Integer.parseInt(id), Integer.parseInt(studid));
+        return null;
     }
 
 }

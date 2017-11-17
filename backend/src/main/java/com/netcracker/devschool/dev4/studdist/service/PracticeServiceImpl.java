@@ -1,8 +1,11 @@
 package com.netcracker.devschool.dev4.studdist.service;
 
+import com.netcracker.devschool.dev4.studdist.entity.Assignment;
 import com.netcracker.devschool.dev4.studdist.entity.Practice;
+import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.repository.AssignmentRepository;
 import com.netcracker.devschool.dev4.studdist.repository.PracticeRepository;
+import com.netcracker.devschool.dev4.studdist.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,9 @@ public class PracticeServiceImpl implements PracticeService {
 
     @Resource
     private AssignmentRepository assignmentRepository;
+
+    @Resource
+    private StudentRepository studentRepository;
 
 
     @Override
@@ -73,5 +79,21 @@ public class PracticeServiceImpl implements PracticeService {
     @Transactional
     public List<Practice> findByStudentId(int id) {
         return practiceRepository.findByStudentId(id);
+    }
+
+    @Override
+    @Transactional
+    public Student removeFromPractice(int id, int studentId) {
+        assignmentRepository.remove(id, studentId);
+        return studentRepository.findOne(studentId);
+    }
+
+    @Override
+    @Transactional
+    public Assignment assign(int id, int studentId) {
+        Assignment assignment = new Assignment();
+        assignment.setPracticeId(id);
+        assignment.setStudentId(studentId);
+        return assignmentRepository.save(assignment);
     }
 }

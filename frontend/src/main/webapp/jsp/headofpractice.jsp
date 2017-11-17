@@ -23,6 +23,8 @@
 
         var selected = [];
 
+        var prtables = [];
+
         function appendPractice(index, value) {
             $('#practices').append('<div class="panel box box-primary">\n' +
                 '                                        <div class="box-header with-border">\n' +
@@ -74,11 +76,16 @@
                 '\n' +
                 '                                        </div>\n' +
                 '                                    </div>');
-            $('#practice_' + value.id).DataTable({
+            prtables[value.id] = $('#practice_' + value.id).DataTable({
                 "processing": true,
                 "serverSide": true,
                 'autoWidth': false,
-                "ajax": "practice/tableForPractice/" + value.id
+                "ajax": "practice/tableForPractice/" + value.id,
+                "rowCallback": function (row, data) {
+                    var button = $(row).find('td:nth-child(8) > button');
+                    var str = button.attr('onclick');
+                    button.attr('onclick', str.substr(0, str.length - 1) + ", " + value.id + ")");
+                }
             });
 
 
@@ -98,8 +105,12 @@
                 refreshSpecialities(this.value, 0);
             });
             refreshSpecialities(1, 0);
+            $('#reservation').daterangepicker();
             $('#request').ajaxForm({
                 dataType: 'json',
+                data: {
+                    "checked[]": selected
+                },
                 success: function (data) {
                     if (data) {
                         appendPractice(0, data);
@@ -107,12 +118,14 @@
                     } else {
                         $('#error').css('display', 'block');
                     }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert(xhr + " " + textStatus + " " + errorThrown);
                 }
             });
             $.validate({
                 lang: 'ru'
             });
-            $('#reservation').daterangepicker();
             oTable = $('#tstudents').DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -144,7 +157,7 @@
 
                 }
             });
-            $('#request').change(function () {
+            $('#request').on('change', function () {
                 oTable.ajax.url("practice/tableForRequest/" + getFacultiesVal() + "/" +
                     getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget());
                 oTable.draw();
@@ -176,6 +189,15 @@
 
         function getDate() {
             return $('#reservation').val();
+        }
+
+        function delStudent(stid, id) {
+            $.ajax({
+                url: 'practice/remove/' + id + '/' + stid + "?${_csrf.parameterName}=${_csrf.token}",
+                success: function () {
+                    prtables[id].draw();
+                }
+            })
         }
 
 
@@ -276,8 +298,9 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <form role="form" id="request" action="practice/addRequest"
-                                      method="post">
+                                <form id="request"
+                                      action="/practice/addRequest/${id}?${_csrf.parameterName}=${_csrf.token}"
+                                      method="post" role="form">
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Название практики</label>

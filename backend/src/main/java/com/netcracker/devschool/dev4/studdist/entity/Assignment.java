@@ -1,6 +1,7 @@
 package com.netcracker.devschool.dev4.studdist.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -8,6 +9,8 @@ import javax.persistence.Table;
 @Table(name = "assignments")
 public class Assignment {
     @Id
+    @GeneratedValue
+    private int id;
     private int practiceId;
     private int studentId;
 
@@ -27,6 +30,14 @@ public class Assignment {
         this.studentId = studentId;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,13 +45,11 @@ public class Assignment {
 
         Assignment that = (Assignment) o;
 
-        return practiceId == that.practiceId && studentId == that.studentId;
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        int result = practiceId;
-        result = 31 * result + studentId;
-        return result;
+        return id;
     }
 }

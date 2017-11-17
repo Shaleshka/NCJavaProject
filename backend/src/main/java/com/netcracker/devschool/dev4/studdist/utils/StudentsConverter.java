@@ -34,13 +34,13 @@ public class StudentsConverter {
         }
         i = offset + 6;
         if (editButton) {
-            result[i] = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"editStudent(6)\">\n" +
+            result[i] = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"editStudent(" + student.getId() + ")\">\n" +
                     "                                                            Редактировать\n" +
                     "                                                        </button>";
             i++;
         }
         if (deleteButton) {
-            result[i] = "<button type=\"button\" class=\"btn btn-danger\" onclick=\"delStudent(6)\">\n" +
+            result[i] = "<button type=\"button\" class=\"btn btn-danger\" onclick=\"delStudent(" + student.getId() + ")\">\n" +
                     "                                                            Удалить\n" +
                     "                                                        </button>";
         }

@@ -128,7 +128,7 @@ public class MainController {
         return model;
     }
 
-    @RequestMapping(value = "/hop", method = RequestMethod.GET)
+    @RequestMapping(value = "/headofpractice", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_HOP')")
     public ModelAndView pageHop() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
