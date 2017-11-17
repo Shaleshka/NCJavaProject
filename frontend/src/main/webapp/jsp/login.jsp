@@ -69,5 +69,14 @@
 <!-- /.login-box -->
 
 <jsp:include page="/jsp/blocks/scripts.jsp"/>
+<script>
+    $(function () {
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+    });
+</script>
 </body>
 </html>

@@ -139,12 +139,12 @@
                     }
                 },
                 "drawCallback": function () {
-                    $('input[type="checkbox"]').iCheck({
+                    $('#tstudents').find('input[type="checkbox"]').iCheck({
                         checkboxClass: 'icheckbox_square-blue',
                         radioClass: 'iradio_square-blue',
                         increaseArea: '20%' // optional
                     });
-                    $('input[type="checkbox"]').on('ifChecked', function () {
+                    $('#tstudents').find('input[type="checkbox"]').on('ifChanged', function () {
                         var id = this.id;
                         var index = $.inArray(id, selected);
 
@@ -154,6 +154,17 @@
                             selected.splice(index, 1);
                         }
                     });
+                    $('.selectall').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('.selectall').on('ifChecked', function () {
+                        $('#tstudents').find('input[type="checkbox"]').iCheck('check');
+                    });
+                    $('.selectall').on('ifUnchecked', function () {
+                        $('#tstudents').find('input[type="checkbox"]').iCheck('uncheck');
+                    });
 
                 }
             });
@@ -162,7 +173,6 @@
                     getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget());
                 oTable.draw();
             });
-
         }
 
         function getFacultiesVal() {
@@ -199,7 +209,6 @@
                 }
             })
         }
-
 
 
         function refreshSpecialities(id, val) {
@@ -366,7 +375,9 @@
                                 <table id="tstudents" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th></th>
+                                        <th>
+                                            <input type="checkbox" class="selectall">
+                                        </th>
                                         <th>Имя</th>
                                         <th>Фамилия</th>
                                         <th>Факультет</th>
@@ -380,7 +391,7 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>Выбрать</th>
+                                        <th><input type="checkbox" class="selectall"></th>
                                         <th>Имя</th>
                                         <th>Фамилия</th>
                                         <th>Факультет</th>

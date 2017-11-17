@@ -15,12 +15,3 @@
 <script src="resources/js/libs/moment.min.js"></script>
 <script src="resources/js/libs/daterangepicker.js"></script>
 <!-- DataTables -->
-<script>
-    $(function () {
-        $('input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%' // optional
-        });
-    });
-</script>
