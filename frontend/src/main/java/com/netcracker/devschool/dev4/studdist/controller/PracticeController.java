@@ -45,6 +45,12 @@ public class PracticeController {
         return practiceService.findByHopId(Integer.parseInt(id));
     }
 
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Practice getById(@PathVariable String id) {
+        return practiceService.findById(Integer.parseInt(id));
+    }
+
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @ResponseBody
     public List<Practice> getAll() {
@@ -178,6 +184,19 @@ public class PracticeController {
         if (studentService.findById(Integer.parseInt(studid)) != null)
             return practiceService.removeFromPractice(Integer.parseInt(id), Integer.parseInt(studid));
         return null;
+    }
+
+    @RequestMapping(value = "/removeAll/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Student> removeAll(@PathVariable(value = "id") String id,
+                                   @RequestParam(value = "students[]") String[] students) {
+        List<Student> result = new ArrayList<>();
+        for (String item : students) {
+            int sid = Integer.parseInt(item.substring(2));
+            if (studentService.findById(sid) != null)
+                result.add(practiceService.removeFromPractice(Integer.parseInt(id), sid));
+        }
+        return result;
     }
 
 }

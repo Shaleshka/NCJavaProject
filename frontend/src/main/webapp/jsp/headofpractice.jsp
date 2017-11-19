@@ -25,6 +25,8 @@
 
         var prtables = [];
 
+        var prselected = [];
+
         function appendPractice(index, value) {
             $('#practices').append('<div class="panel box box-primary">\n' +
                 '                                        <div class="box-header with-border">\n' +
@@ -40,7 +42,13 @@
                 '                                                    <h3 class="box-title">Студенты</h3>\n' +
                 '                                                </div>\n' +
                 '                                                <!-- /.box-header -->\n' +
-                '                                                <div class="box-body">\n' +
+                '                                                <div class="box-body"><div class="panel">\n' +
+                '<button type="button" id="delBut_' + value.id + '" class="btn btn-danger disabled" onclick="delChecked(' + value.id + ')">\n' +
+                '                                                            Удалить выделеных\n' +
+                '                                                        </button>' +
+                '<button type="button" class="btn btn-primary pull-right" onclick="info(' + value.id + ')">\n' +
+                '                                                            Информация\n' +
+                '                                                        </button></div>' +
                 '                                                    <table id="practice_' + value.id + '" class="table table-bordered table-striped">\n' +
                 '                                                        <thead>\n' +
                 '                                                        <tr>\n' +
@@ -76,6 +84,7 @@
                 '\n' +
                 '                                        </div>\n' +
                 '                                    </div>');
+            prselected[value.id] = [];
             prtables[value.id] = $('#practice_' + value.id).DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -85,6 +94,34 @@
                     var button = $(row).find('td:nth-child(8) > button');
                     var str = button.attr('onclick');
                     button.attr('onclick', str.substr(0, str.length - 1) + ", " + value.id + ")");
+                },
+                "drawCallback": function () {
+                    var cb = $('#practice_' + value.id).find('input[type="checkbox"]');
+                    cb.iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    cb.on('ifChanged', function () {
+                        var id = this.id;
+                        var index = $.inArray(id, prselected[value.id]);
+
+                        if (index === -1) {
+                            prselected[value.id].push(id);
+                        } else {
+                            prselected[value.id].splice(index, 1);
+                        }
+
+                        if (prselected[value.id].length > 0) {
+                            $('#delBut_' + value.id).attr('class', 'btn btn-danger');
+                        }
+                        else {
+                            $('#delBut_' + value.id).attr('class', 'btn btn-danger disabled');
+                        }
+                    });
+                    if ($.inArray(cb.attr('id'), prselected[value.id]) !== -1) {
+                        cb.iCheck('check');
+                    }
                 }
             });
 
@@ -139,12 +176,23 @@
                     }
                 },
                 "drawCallback": function () {
-                    $('#tstudents').find('input[type="checkbox"]').iCheck({
+                    $('#tstudents').find('input[type="checkbox"]').not('.selectall').iCheck({
                         checkboxClass: 'icheckbox_square-blue',
                         radioClass: 'iradio_square-blue',
                         increaseArea: '20%' // optional
                     });
-                    $('#tstudents').find('input[type="checkbox"]').on('ifChanged', function () {
+                    $('.selectall').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('.selectall').on('ifChecked', function () {
+                        $('#tstudents').find('input[type="checkbox"]').not('.selectall').iCheck('check');
+                    });
+                    $('.selectall').on('ifUnchecked', function () {
+                        $('#tstudents').find('input[type="checkbox"]').not('.selectall').iCheck('uncheck');
+                    });
+                    $('#tstudents').find('input[type="checkbox"]').not('.selectall').on('ifChanged', function () {
                         var id = this.id;
                         var index = $.inArray(id, selected);
 
@@ -153,17 +201,12 @@
                         } else {
                             selected.splice(index, 1);
                         }
-                    });
-                    $('.selectall').iCheck({
-                        checkboxClass: 'icheckbox_square-blue',
-                        radioClass: 'iradio_square-blue',
-                        increaseArea: '20%' // optional
-                    });
-                    $('.selectall').on('ifChecked', function () {
-                        $('#tstudents').find('input[type="checkbox"]').iCheck('check');
-                    });
-                    $('.selectall').on('ifUnchecked', function () {
-                        $('#tstudents').find('input[type="checkbox"]').iCheck('uncheck');
+                        if ($('#tstudents').find('input[type="checkbox"]').not('.selectall').length === selected.length) {
+                            $('.selectall').prop('checked', true).iCheck('update');
+                        }
+                        else {
+                            $('.selectall').prop('checked', false).iCheck('update');
+                        }
                     });
 
                 }
@@ -208,6 +251,63 @@
                     prtables[id].draw();
                 }
             })
+        }
+
+        function delChecked(id) {
+            $.ajax({
+                url: 'practice/removeAll/' + id + "?${_csrf.parameterName}=${_csrf.token}",
+                method: 'post',
+                data: {
+                    "students[]": prselected[id]
+                },
+                success: function (data) {
+                    prtables[id].draw();
+                    prselected[id] = [];
+                    $('#delBut_' + value.id).attr('class', 'btn btn-danger disabled');
+                }
+            })
+        }
+
+        function info(id) {
+            $.ajax({
+                url: 'practice/get/' + id + "?${_csrf.parameterName}=${_csrf.token}",
+                success: function (data) {
+                    var modal = $('#info');
+                    modal.find('#p_name').text("Имя: " + data.name);
+                    modal.find('#p_faculty').text("Факультет: " + data.facultyId);
+                    modal.find('#p_speciality').text("Специальность: " + data.specialityId);
+                    modal.find('#p_number').text("Кол-во: " + data.number);
+                    modal.find('#p_minavg').text("Мин. ср. балл: " + data.minAvg);
+                    modal.find('#p_isbudget').text("Бюджетник: " + data.isBudget);
+                    modal.find('#p_daterange').text("Дата: " + customDateConverter(data.start) + " - " + customDateConverter(data.end));
+                    modal.modal();
+                }
+            })
+        }
+
+        function customDateConverter(date) {
+            var dim = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var mstrings = ["января", "февраля", "марта", "апреля", "мая", "июня",
+                "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+            var seconds = date / 1000 + 3 * 3600;
+            var i = 0;
+            while (seconds > 3600 * 24 * 365) {
+                seconds -= 3600 * 24 * 365 + !(i % 4) * 24 * 3600;
+                i++;
+            }
+            year = i + 1970;
+            if (year % 4 === 0) dim[2] = 29;
+            var month;
+            for (i = 0; i < 12; i++) {
+                seconds -= dim[i] * 24 * 3600;
+                if (seconds < 0) {
+                    seconds += dim[i] * 24 * 3600;
+                    month = i;
+                    break;
+                }
+            }
+            var days = seconds / (24 * 3600) + 1;
+            return days.toString() + " " + mstrings[month] + " " + year.toString();
         }
 
 
@@ -417,6 +517,34 @@
     <!-- /.row -->
 
 </section>
+
+<div class="modal modal-info fade" id="info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Информация о практике</h4>
+            </div>
+            <div class="modal-body">
+                <p id="p_name">Имя: жава</p>
+                <p id="p_faculty">Факультет: ФКП</p>
+                <p id="p_speciality">Специальность: ПМС</p>
+                <p id="p_number">Количество студентов: </p>
+                <p id="p_minavg">Минимальный средний балл: </p>
+                <p id="p_isbudget">Бюджетники: да</p>
+                <p id="p_daterange">Дата: 12 февраля 2017 - 15 сентября 2017 </p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <jsp:include page="/jsp/blocks/scripts.jsp"/>
 <script>
     $(function () {
