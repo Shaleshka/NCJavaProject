@@ -20,7 +20,6 @@ public class Student {
     private int group;
     private double avgScore;
     private int isBudget;
-    private int course;
 
 
     @Override
@@ -100,14 +99,6 @@ public class Student {
 
     public void setIsBudget(int isBudget) {
         this.isBudget = isBudget;
-    }
-
-    public int getCourse() {
-        return course;
-    }
-
-    public void setCourse(int course) {
-        this.course = course;
     }
 
     public String getImageUrl() {

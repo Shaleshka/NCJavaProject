@@ -215,7 +215,6 @@ public class MainController {
             student.setFacultyId(faculty);
             student.setSpecialityId(speciality);
             student.setIsBudget(isBudget);
-            student.setCourse(8 - speciality / 100000);
             studentService.create(student);
         }
 
@@ -284,7 +283,6 @@ public class MainController {
         student.setAvgScore(10);
         student.setFacultyId(1);
         student.setSpecialityId(1);
-        student.setCourse(1);
         studentService.create(student);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("msg", "Вы были успешно зарегистрированы. Теперь вы можете войти с ипользованием указанного логина и пароля");

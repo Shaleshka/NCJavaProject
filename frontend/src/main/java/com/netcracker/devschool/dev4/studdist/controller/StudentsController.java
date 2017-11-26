@@ -1,21 +1,23 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.form.StudentEdit;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Controller for methods connected with students (info, updating, etc.)
@@ -35,33 +37,23 @@ public class StudentsController {
 
     @RequestMapping(value = "/edit/{studentId}", method = RequestMethod.POST)
     @ResponseBody
-    public Student editStudent(@PathVariable String studentId,
-                               @RequestParam(value = "fname", required = false) String fname,
-                               @RequestParam(value = "lname", required = false) String lname,
-                               @RequestParam(value = "faculty", required = false) String faculty,
-                               @RequestParam(value = "speciality", required = false) String speciality,
-                               @RequestParam(value = "group", required = false) String group,
-                               @RequestParam(value = "isBudget", required = false) String isBudget,
-                               @RequestParam(value = "avgScore", required = false) String avgScore
-    ) {
-        String msg = "";
-        Student student = studentService.findById(Integer.parseInt(studentId));
-        try {
-            if (!Objects.equals(fname, "") && fname != null) student.setFname(fname);
-            if (!Objects.equals(lname, "") && lname != null) student.setLname(lname);
-            if (!Objects.equals(faculty, "") && faculty != null) student.setFacultyId(Integer.parseInt(faculty));
-            if (!Objects.equals(speciality, "") && speciality != null)
-                student.setSpecialityId(Integer.parseInt(speciality));
-            if (!Objects.equals(group, "") && group != null) student.setGroup(Integer.parseInt(group));
-            if (isBudget != null) student.setIsBudget(1);
-            else student.setIsBudget(0);
-            if (!Objects.equals(avgScore, "") && avgScore != null) student.setAvgScore(Double.parseDouble(avgScore));
-            studentService.update(student);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    public Object editStudent(@PathVariable String studentId,
+                              @Valid @ModelAttribute("studentEdit") StudentEdit student, BindingResult result) {
+        if (result.hasErrors()) {
+            return result.getAllErrors();
+        } else {
+            Student updated = studentService.findById(Integer.parseInt(studentId));
+            updated.setFname(student.getFname());
+            updated.setLname(student.getLname());
+            updated.setFacultyId(student.getFaculty());
+            updated.setSpecialityId(student.getSpeciality());
+            updated.setGroup(student.getGroup());
+            updated.setAvgScore(student.getAvgScore());
+            if (student.getIsBudget() != null) updated.setIsBudget(1);
+            else updated.setIsBudget(0);
+            studentService.update(updated);
+            return updated;
         }
-        return student;
     }
 
     @RequestMapping(value = "/imageUpload/{id}", method = RequestMethod.POST)

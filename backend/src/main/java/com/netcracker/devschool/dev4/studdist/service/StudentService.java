@@ -17,7 +17,7 @@ public interface StudentService {
 
     Page<Student> findForRequest(int facultyId, int specialityId, Date startdate, Date enddate, int isbudget, double minAvg, String sortBy, String order, int start, int length);
 
-    Student update(Student student) throws Exception;
+    Student update(Student student);
 
     Student findById(int id);
 

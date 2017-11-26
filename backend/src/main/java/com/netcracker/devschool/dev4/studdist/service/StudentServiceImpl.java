@@ -64,7 +64,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public Student update(Student student) throws Exception {
+    public Student update(Student student) {
         Student updated = studentRepository.findOne(student.getId());
         updated.setFname(student.getFname());
         updated.setLname(student.getLname());
@@ -74,7 +74,6 @@ public class StudentServiceImpl implements StudentService {
         updated.setGroup(student.getGroup());
         updated.setAvgScore(student.getAvgScore());
         updated.setIsBudget(student.getIsBudget());
-        updated.setCourse(student.getCourse());
         return updated; //TODO:
     }
 

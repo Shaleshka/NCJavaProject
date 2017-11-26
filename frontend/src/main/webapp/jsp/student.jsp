@@ -123,7 +123,12 @@
             $('#student_edit').ajaxForm({
                 dataType: 'json',
                 success: function (data) {
-                    if (data) {
+                    if (data[0] != null) {
+                        $('#success').css('display', 'none');
+                        $('#error').css('display', 'block');
+                        $('#error').find('h4').html("<i class=\"icon fa fa-ban\"></i> " + data[0].defaultMessage);
+                    } else {
+
                         $('#user_avatar').attr("src", "images/" + data.imageUrl);
                         $('#user_name').html(data.fname + " " + data.lname);
                         //that's a trick to avoid requests to a faculty table for a name (that'll mean either additional
@@ -132,13 +137,13 @@
                         //(not implemented yet)
                         $('#faculty').text($("#faculties option[value='" + data.facultyId + "']").text());
                         $('#group').text(data.group);
+                        $('#error').css('display', 'none');
                         $('#success').css('display', 'block');
-                    } else {
-                        $('#error').css('display', 'block');
                     }
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     $('#error').css('display', 'block');
+                    $('#error').find('h4').text("<i class=\"icon fa fa-ban\"></i> Неизвестная ошибка");
                 }
             });
             $.validate({
