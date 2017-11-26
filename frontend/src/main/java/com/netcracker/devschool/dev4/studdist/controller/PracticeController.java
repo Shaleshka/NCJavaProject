@@ -4,7 +4,9 @@ import com.netcracker.devschool.dev4.studdist.beans.PracticeViewModel;
 import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
 import com.netcracker.devschool.dev4.studdist.entity.Practice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
-import com.netcracker.devschool.dev4.studdist.service.*;
+import com.netcracker.devschool.dev4.studdist.service.HeadOfPracticeService;
+import com.netcracker.devschool.dev4.studdist.service.PracticeService;
+import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.utils.Event;
 import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
@@ -30,13 +32,7 @@ public class PracticeController {
     private StudentService studentService;
 
     @Autowired
-    private FacultyService facultyService;
-
-    @Autowired
-    private SpecialityService specialityService;
-
-    @Autowired
-    private UserService userService;
+    private StudentsConverter converter;
 
     @Autowired
     private HeadOfPracticeService headOfPracticeService;
@@ -92,11 +88,9 @@ public class PracticeController {
         result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
         result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());
         result.setDraw(Integer.parseInt(draw));
-        StudentsConverter converter = new StudentsConverter();
         for (Student item: list
                 ) {
-            result.addData(converter.studentToStringArray(item, facultyService.findById(item.getFacultyId()).getName(),
-                    specialityService.findById(item.getSpecialityId()).getName(), true, true, false));
+            result.addData(converter.studentToStringArray(item, true, true, false));
         }
         return result;
     }
@@ -132,11 +126,9 @@ public class PracticeController {
         result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
         result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());
         result.setDraw(Integer.parseInt(draw));
-        StudentsConverter converter = new StudentsConverter();
         for (Student item : list
                 ) {
-            result.addData(converter.studentToStringArray(item, facultyService.findById(item.getFacultyId()).getName(),
-                    specialityService.findById(item.getSpecialityId()).getName(), true, false, false));
+            result.addData(converter.studentToStringArray(item, true, false, false));
         }
         return result;
     }

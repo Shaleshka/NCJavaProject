@@ -1,8 +1,6 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.entity.Student;
-import com.netcracker.devschool.dev4.studdist.service.FacultyService;
-import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
@@ -30,10 +28,7 @@ public class StudentsController {
     private StudentService studentService;
 
     @Autowired
-    private FacultyService facultyService;
-
-    @Autowired
-    private SpecialityService specialityService;
+    private StudentsConverter converter;
 
     //Save the uploaded file to this folder
 
@@ -119,12 +114,10 @@ public class StudentsController {
         result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
         result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());
         result.setDraw(Integer.parseInt(draw));
-        StudentsConverter converter = new StudentsConverter();
         for (Student item: list
                 ) {
             //passing services is temporary fix, todo: make this somehow normal
-            result.addData(converter.studentToStringArray(item, facultyService.findById(item.getFacultyId()).getName(),
-                    specialityService.findById(item.getSpecialityId()).getName(), true, true, true));
+            result.addData(converter.studentToStringArray(item, true, true, true));
         }
         return result;
     }

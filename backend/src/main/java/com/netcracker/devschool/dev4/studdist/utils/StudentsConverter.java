@@ -1,8 +1,19 @@
 package com.netcracker.devschool.dev4.studdist.utils;
 
 import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.service.FacultyService;
+import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StudentsConverter {
+
+    @Autowired
+    private FacultyService facultyService;
+
+    @Autowired
+    private SpecialityService specialityService;
 
     private String[] studentToStringArray(Student student, String facultyName, String specialityName) {
         String[] result = new String[6];
@@ -16,8 +27,10 @@ public class StudentsConverter {
         return result;
     }
 
-    public String[] studentToStringArray(Student student, String facultyName, String specialityName,
+    public String[] studentToStringArray(Student student,
                                          boolean chekbox, boolean deleteButton, boolean editButton) {
+        String facultyName = facultyService.findById(student.getFacultyId()).getName();
+        String specialityName = specialityService.findById(student.getSpecialityId()).getName();
         int i = 0, offset = 0;
         if (chekbox) {
             i++;

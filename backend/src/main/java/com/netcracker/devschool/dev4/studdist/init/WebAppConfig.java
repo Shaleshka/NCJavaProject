@@ -57,6 +57,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Resource
     private PracticeToPracticeViewModelConverter practiceToPracticeViewModelConverter;
 
+    @Resource
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
