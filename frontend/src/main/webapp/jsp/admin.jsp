@@ -20,6 +20,7 @@
     <script>
 
         var facultyTable;
+        var studentsTable;
 
         function appendPractice(index, value) {
             $('#practices').append('<div class="panel box box-primary">\n' +
@@ -107,7 +108,7 @@
                     }
                 }
             });
-            $('#tstudents').DataTable({
+            studentsTable = $('#tstudents').DataTable({
                 "processing": true,
                 "serverSide": true,
                 'autoWidth': false,
@@ -143,9 +144,6 @@
                     }
                 }
             });
-            $.validate({
-                lang: 'ru'
-            });
         }
 
         function delFaculty(id) {
@@ -162,6 +160,46 @@
                     }
                 }
             })
+        }
+
+        function fillForm(id) {
+            $.ajax({
+                url: 'students/get/' + id,
+                dataType: 'json',
+                success: function (data) {
+                    $('#f_faculties').val(data.facultyId);
+                    refreshSpecialities(data.facultyId, data.specialityId);
+                    $('input[name=fname]').val(data.fname);
+                    $('input[name=lname]').val(data.lname);
+                    $('input[name=group]').val(data.group);
+                    if (data.isBudget) $('input[name=isBudget]').iCheck('toggle');
+                    $('input[name=avgScore]').val(data.avgScore);
+                    $('#student_edit').attr('action', '/students/edit/' + id + '?${_csrf.parameterName}=${_csrf.token}');
+                    $('#student_edit').ajaxForm({
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data[0] != null) {
+                                $('#success').css('display', 'none');
+                                $('#error').css('display', 'block');
+                                $('#error').find('h4').html("<i class=\"icon fa fa-ban\"></i> " + data[0].defaultMessage);
+                            } else {
+                                $('#error').css('display', 'none');
+                                $('#success').css('display', 'block');
+                                studentsTable.draw();
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            $('#error').css('display', 'block');
+                            $('#error').find('h4').text("<i class=\"icon fa fa-ban\"></i> Неизвестная ошибка");
+                        }
+                    });
+                }
+            });
+        }
+
+        function editStudent(id) {
+            fillForm(id);
+            $('#edit-student').modal('show');
         }
 
         function refreshSpecialities(id, val) {
@@ -539,24 +577,91 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-    <div class="modal fade" id="new-student" data-vivaldi-spatnav-clickable="1" style="display: none;">
+    <div class="modal fade" id="edit-student" data-vivaldi-spatnav-clickable="1" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Новая специальность</h4>
+                    <h4 class="modal-title">Редактирование студента</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form">
+                    <div id="success" class="alert alert-success alert-dismissible" style="display: none">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-check"></i> Изменения приняты!</h4>
+                    </div>
+
+                    <div id="error" class="alert alert-danger alert-dismissible" style="display: none">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-ban"></i> Ошибка!</h4>
+                    </div>
+                    <form id="student_edit"
+                          action="" method="post"
+                          role="form">
                         <div class="box-body">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Имя</label>
+                                <input data-validation="length letternumeric" data-validation-length="2-45"
+                                       type="text" class="form-control" name="fname"
+                                       placeholder="Введите имя...">
+                            </div>
+                            <div class="form-group">
+                                <label>Фамилия</label>
+                                <input data-validation="length letternumeric" data-validation-length="2-45"
+                                       type="text" class="form-control" name="lname"
+                                       placeholder="Введите фамилию...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="f_faculties">Выберите факультет</label>
+                                <select id="f_faculties" name="faculty" class="form-control">
+                                    <c:forEach items="${faculties}" var="item">
+                                        <option value="${item.getId()}">${item.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="specs">Выберите специальность</label>
+                                <select id="specs" name="speciality" class="form-control">
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Группа</label>
+                                <input data-validation="length number" data-validation-length="6"
+                                       data-validation-error-msg="Группа должна быть шестизначным числом"
+                                       type="text" class="form-control" name="group"
+                                       placeholder="Введите группу...">
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    <input name="isBudget" type="checkbox">
+                                    Бюджетник
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Средний балл</label>
+                                <input data-validation="number" data-validation-allowing="range[4.0;10.0],float"
+                                       data-validation-error-msg="Значение выходит за диапазон возможных оценок"
+                                       type="text" class="form-control" name="avgScore"
+                                       placeholder="Введите ср. балл...">
+                            </div>
+                            <input type="hidden" name="${_csrf.parameterName}"
+                                   value="${_csrf.token}"/>
 
                         </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Закрыть
+                            </button>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Создать</button>
                 </div>
             </div>
             <!-- /.modal-content -->
