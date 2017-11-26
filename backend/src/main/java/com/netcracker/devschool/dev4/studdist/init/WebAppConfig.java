@@ -1,11 +1,15 @@
 package com.netcracker.devschool.dev4.studdist.init;
 
 
+import com.netcracker.devschool.dev4.studdist.converters.PracticeToPracticeViewModelConverter;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ConversionServiceFactoryBean;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -22,7 +26,9 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Spring MVC configuration
@@ -47,6 +53,9 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Resource
     private Environment env;
+
+    @Resource
+    private PracticeToPracticeViewModelConverter practiceToPracticeViewModelConverter;
 
     @Bean
     public DataSource dataSource() {
@@ -90,6 +99,22 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
+    }
+
+    @Bean(name = "conversionService")
+    public ConversionService getConversionService() {
+        ConversionServiceFactoryBean bean = new ConversionServiceFactoryBean();
+        bean.setConverters(getConverters());
+        bean.afterPropertiesSet();
+        return bean.getObject();
+    }
+
+    private Set<Converter> getConverters() {
+        Set<Converter> converters = new HashSet<Converter>();
+
+        converters.add(practiceToPracticeViewModelConverter);
+
+        return converters;
     }
 
     @Bean

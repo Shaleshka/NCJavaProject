@@ -16,7 +16,6 @@ public class Practice {
     private String name;
     private int facultyId;
     private int specialityId;
-    private int number;
     private double minAvg;
     private Date start;
     private Date end;
@@ -99,14 +98,6 @@ public class Practice {
 
     public void setEnd(Date end) {
         this.end = end;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public int getIsBudget() {

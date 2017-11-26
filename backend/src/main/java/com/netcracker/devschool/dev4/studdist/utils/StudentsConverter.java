@@ -11,7 +11,8 @@ public class StudentsConverter {
         result[2] = facultyName;
         result[3] = specialityName;
         result[4] = String.valueOf(student.getGroup());
-        result[5] = String.valueOf(student.getAvgScore());
+        String s = String.valueOf(student.getAvgScore());
+        result[5] = s.substring(0, Math.min(4, s.length()));
         return result;
     }
 

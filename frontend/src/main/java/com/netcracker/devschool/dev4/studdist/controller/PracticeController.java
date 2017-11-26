@@ -1,5 +1,6 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
+import com.netcracker.devschool.dev4.studdist.beans.PracticeViewModel;
 import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
 import com.netcracker.devschool.dev4.studdist.entity.Practice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
@@ -8,6 +9,7 @@ import com.netcracker.devschool.dev4.studdist.utils.Event;
 import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,9 @@ public class PracticeController {
     @Autowired
     private HeadOfPracticeService headOfPracticeService;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @RequestMapping(value = "/getByHop/{id}", method = RequestMethod.GET)
     @ResponseBody
     public List<Practice> getByHopId(@PathVariable String id) {
@@ -47,8 +52,8 @@ public class PracticeController {
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Practice getById(@PathVariable String id) {
-        return practiceService.findById(Integer.parseInt(id));
+    public PracticeViewModel getById(@PathVariable String id) {
+        return conversionService.convert(practiceService.findById(Integer.parseInt(id)), PracticeViewModel.class);
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
@@ -141,7 +146,6 @@ public class PracticeController {
     public Practice addPractice(@PathVariable(value = "id") String id,
                                 @RequestParam(value = "name") String name,
                                 @RequestParam(value = "daterange") String daterange,
-                                @RequestParam(value = "number") String number,
                                 @RequestParam(value = "faculty") String faculty,
                                 @RequestParam(value = "speciality") String speciality,
                                 @RequestParam(value = "isBudget", required = false) String isBudget,
@@ -150,7 +154,6 @@ public class PracticeController {
         //todo validation
         Practice practice = new Practice();
         practice.setName(name);
-        practice.setNumber(Integer.parseInt(number));
         practice.setFacultyId(Integer.parseInt(faculty));
         practice.setSpecialityId(Integer.parseInt(speciality));
         if (isBudget != null) practice.setIsBudget(1);

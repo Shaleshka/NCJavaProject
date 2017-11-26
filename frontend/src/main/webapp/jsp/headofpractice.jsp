@@ -36,7 +36,7 @@
                 '                                                </a>\n' +
                 '                                            </h4>\n' +
                 '                                        </div>\n' +
-                '                                        <div id="collapse_' + value.id + '" class="panel-collapse collapse in">\n' +
+                '                                        <div id="collapse_' + value.id + '" class="panel-collapse collapse">\n' +
                 '                                            <div class="box">\n' +
                 '                                                <div class="box-header">\n' +
                 '                                                    <h3 class="box-title">Студенты</h3>\n' +
@@ -201,13 +201,19 @@
                         } else {
                             selected.splice(index, 1);
                         }
-                        if ($('#tstudents').find('input[type="checkbox"]').not('.selectall').length === selected.length) {
+                        if ($('#tstudents').find('input[type="checkbox"]').not('.selectall').length === $('#tstudents').find('input[type="checkbox"]:checked').not('.selectall').length) {
                             $('.selectall').prop('checked', true).iCheck('update');
                         }
                         else {
                             $('.selectall').prop('checked', false).iCheck('update');
                         }
                     });
+                    if ($('#tstudents').find('input[type="checkbox"]').not('.selectall').length === $('#tstudents').find('input[type="checkbox"]:checked').not('.selectall').length) {
+                        $('.selectall').prop('checked', true).iCheck('update');
+                    }
+                    else {
+                        $('.selectall').prop('checked', false).iCheck('update');
+                    }
 
                 }
             });
@@ -216,6 +222,17 @@
                     getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget());
                 oTable.draw();
             });
+            $('#searchbox').keyup(function () {
+                $.each($('.panel.box.box-primary'), function (id, value) {
+                    var a = $($(value).find('h4 > a')[0]);
+                    if (a.text().toLowerCase().indexOf($('#searchbox').val().toLowerCase()) >= 0 || $('#searchbox').val() === "") {
+                        $(value).css('display', 'block')
+                    } else {
+                        $(value).css('display', 'none')
+                    }
+
+                })
+            })
         }
 
         function getFacultiesVal() {
@@ -273,12 +290,13 @@
                 url: 'practice/get/' + id + "?${_csrf.parameterName}=${_csrf.token}",
                 success: function (data) {
                     var modal = $('#info');
+                    var yesno = ["да", "нет"];
                     modal.find('#p_name').text("Имя: " + data.name);
-                    modal.find('#p_faculty').text("Факультет: " + data.facultyId);
-                    modal.find('#p_speciality').text("Специальность: " + data.specialityId);
+                    modal.find('#p_faculty').text("Факультет: " + data.faculty);
+                    modal.find('#p_speciality').text("Специальность: " + data.speciality);
                     modal.find('#p_number').text("Кол-во: " + data.number);
                     modal.find('#p_minavg').text("Мин. ср. балл: " + data.minAvg);
-                    modal.find('#p_isbudget').text("Бюджетник: " + data.isBudget);
+                    modal.find('#p_isbudget').text("Бюджетник: " + yesno[data.isBudget]);
                     modal.find('#p_daterange').text("Дата: " + customDateConverter(data.start) + " - " + customDateConverter(data.end));
                     modal.modal();
                 }
@@ -324,7 +342,12 @@
                     $('#specs').html(options);
                     if (val) {
                         $('#specs').val(val);
+                    } else {
+                        $('#specs').val(data[0].id);
                     }
+                    oTable.ajax.url("practice/tableForRequest/" + getFacultiesVal() + "/" +
+                        getSpecialityVal() + "?minavg=" + getMinAvgVal() + "&date=" + getDate() + "&budget=" + getIsBudget());
+                    oTable.draw();
                 }
             });
         }
@@ -351,12 +374,6 @@
 
                             <b>Компания</b> <a class="pull-right">${company}</a>
                         </li>
-                        <li class="list-group-item">
-                            <b>Действующих практик</b> <a class="pull-right">3</a>
-                        </li>
-                        <li class="list-group-item">
-                            <b>Заявок</b> <a class="pull-right">1</a>
-                        </li>
                     </ul>
 
                     <a href="/logout" class="btn btn-primary btn-block"><b>Выйти</b></a>
@@ -381,6 +398,16 @@
                             <!-- /.box-header -->
                             <div class="box-body">
                                 <div class="box-group" id="practices">
+                                    <div class="panel">
+                                        <div class="input-group">
+                                            <input type="text" name="q" id="searchbox" class="form-control"
+                                                   placeholder="Поиск...">
+                                            <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+                                        </div>
+                                    </div>
                                     <!-- collapsing boxes with tables -->
                                 </div>
                             </div>
@@ -427,13 +454,6 @@
                                                    id="reservation">
                                         </div>
                                         <!-- /.input group -->
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Количество студентов</label>
-                                        <input data-validation="number" data-validation-allowing="range[5;1000]"
-                                               data-validation-error-msg="Введите целое число от 5 до 1000" type="text"
-                                               class="form-control" name="number" placeholder="Введите кол-во...">
                                     </div>
 
                                     <div class="form-group">
