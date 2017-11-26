@@ -61,4 +61,10 @@ public class SpecialityServiceImpl implements SpecialityService {
     public List<Speciality> findByFacultyId(int id) {
         return specialityRepository.findByFacultyId(id);
     }
+
+    @Override
+    @Transactional
+    public void deleteByFacultyId(int id) {
+        specialityRepository.deleteByFacultyId(id);
+    }
 }

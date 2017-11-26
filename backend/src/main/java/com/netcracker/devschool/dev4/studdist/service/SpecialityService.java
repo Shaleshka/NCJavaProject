@@ -18,4 +18,6 @@ public interface SpecialityService {
 
     List<Speciality> findByFacultyId(int id);
 
+    void deleteByFacultyId(int id);
+
 }

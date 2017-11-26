@@ -5,11 +5,9 @@ import com.netcracker.devschool.dev4.studdist.entity.Speciality;
 import com.netcracker.devschool.dev4.studdist.service.FacultyService;
 import com.netcracker.devschool.dev4.studdist.service.SpecialityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,8 +38,32 @@ public class UniversityController {
 
     @RequestMapping(value = "/getSpecialitiesByFacultyId/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Speciality> getSpecilaitiesByFacultyId(@PathVariable int id) {
+    public List<Speciality> getSpecialitiesByFacultyId(@PathVariable int id) {
         return specialityService.findByFacultyId(id);
+    }
+
+    @RequestMapping(value = "/addFaculty", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public Faculty addFaculty(@RequestParam(value = "name") String name) {
+        if (name.length() > 1 && name.length() < 46) {
+            Faculty faculty = new Faculty();
+            faculty.setName(name);
+            return facultyService.create(faculty);
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/delFaculty", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public Faculty delFaculty(@RequestParam(value = "id") String id) {
+        try {
+            specialityService.deleteByFacultyId(Integer.parseInt(id));
+            return facultyService.delete(Integer.parseInt(id));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

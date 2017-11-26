@@ -19,6 +19,8 @@
 
     <script>
 
+        var facultyTable;
+
         function appendPractice(index, value) {
             $('#practices').append('<div class="panel box box-primary">\n' +
                 '                                        <div class="box-header with-border">\n' +
@@ -85,7 +87,9 @@
                 url: 'practice/getAll',
                 dataType: 'json',
                 success: function (data) {
-                    $.each(data, function (index, value) {appendPractice(index, value)});
+                    $.each(data, function (index, value) {
+                        appendPractice(index, value)
+                    });
                 }
             });
             $('#faculties').on('change', function () {
@@ -109,7 +113,7 @@
                 'autoWidth': false,
                 "ajax": "students/tableAllStudents"
             });
-            $('#tfaculty').DataTable({
+            facultyTable = $('#tfaculty').DataTable({
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,
@@ -117,17 +121,47 @@
                 'info': true,
                 'autoWidth': false
             });
-            $('#tgroups').DataTable({
+            $('#tspecialities').DataTable({
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,
                 'ordering': true,
                 'info': true,
                 'autoWidth': false
+            });
+            $('#facultyForm').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        facultyTable.row.add([
+                            data.name,
+                            '<button onclick="delFaculty(' + data.id + ')" type="button" class="btn btn-block btn-danger">\n' +
+                            '                                                                        Удалить\n' +
+                            '                                                                    </button>'
+                        ]).draw(false);
+                        $('#new-faculty').modal('hide');
+                    }
+                }
             });
             $.validate({
                 lang: 'ru'
             });
+        }
+
+        function delFaculty(id) {
+            $.ajax({
+                url: '/university/delFaculty?${_csrf.parameterName}=${_csrf.token}',
+                method: 'post',
+                data: {
+                    'id': id
+                },
+                success: function (data) {
+                    if (data) {
+                        facultyTable.rows('#ftr' + data.id).remove().draw();
+                        //todo: delete specialities from table
+                    }
+                }
+            })
         }
 
         function refreshSpecialities(id, val) {
@@ -229,7 +263,7 @@
                                 <h3 class="box-title">Студенты</h3>
                                 <div class="pull-right">
                                     <button type="button" class="btn btn-default"
-                                            data-toggle="modal" data-target="#new-faculty">
+                                            data-toggle="modal" data-target="#new-student">
                                         Добавить студента
                                     </button>
                                 </div>
@@ -320,10 +354,12 @@
                                                         </thead>
                                                         <tbody>
                                                         <c:forEach items="${faculties}" var="item">
-                                                            <tr>
+                                                            <tr id="ftr${item.getId()}">
                                                                 <td>${item.getName()}</td>
                                                                 <td>
-                                                                    <button onclick="delFaculty(${item.getId()})" type="button" class="btn btn-block btn-danger">
+                                                                    <button onclick="delFaculty(${item.getId()})"
+                                                                            type="button"
+                                                                            class="btn btn-block btn-danger">
                                                                         Удалить
                                                                     </button>
                                                                 </td>
@@ -355,7 +391,8 @@
                                                 </div>
                                                 <!-- /.box-header -->
                                                 <div class="box-body">
-                                                    <table id="tgroups" class="table table-bordered table-striped">
+                                                    <table id="tspecialities"
+                                                           class="table table-bordered table-striped">
                                                         <thead>
                                                         <tr>
                                                             <th>Имя</th>
@@ -369,7 +406,9 @@
                                                                 <td>${item.getName()}</td>
                                                                 <td>${faculties.stream().filter(faculty -> faculty.getId()==item.getFacultyId()).findFirst().get().getName()}</td>
                                                                 <td>
-                                                                    <button onclick="delSpeciality(${item.getId()})" type="button" class="btn btn-block btn-danger">
+                                                                    <button onclick="delSpeciality(${item.getId()})"
+                                                                            type="button"
+                                                                            class="btn btn-block btn-danger">
                                                                         Удалить
                                                                     </button>
                                                                 </td>
@@ -444,20 +483,22 @@
                         <span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">Новый факультет</h4>
                 </div>
-                <div class="modal-body">
-                    <form role="form">
+                <form role="form" id="facultyForm" action="/university/addFaculty?${_csrf.parameterName}=${_csrf.token}"
+                      method="post">
+                    <div class="modal-body">
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Имя</label>
-                                <input type="text" class="form-control" placeholder="Введите имя факультета...">
+                                <input type="text" name="name" class="form-control"
+                                       placeholder="Введите имя факультета...">
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Создать</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                    </div>
+                </form>
             </div>
             <!-- /.modal-content -->
         </div>
@@ -486,6 +527,30 @@
                                     <option>ФРЭ</option>
                                 </select>
                             </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Создать</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="new-student" data-vivaldi-spatnav-clickable="1" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Новая специальность</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="box-body">
+
                         </div>
                     </form>
                 </div>
