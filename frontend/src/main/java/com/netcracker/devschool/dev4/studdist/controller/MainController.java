@@ -24,6 +24,7 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.entity.*;
+import com.netcracker.devschool.dev4.studdist.form.HeadOfPracticeForm;
 import com.netcracker.devschool.dev4.studdist.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,13 +33,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Random;
 
@@ -289,6 +290,33 @@ public class MainController {
         modelAndView.setViewName("login");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/admin/createHop", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Object createHOP(@Valid @ModelAttribute("headOfPracticeForm") HeadOfPracticeForm headOfPracticeForm, BindingResult result) {
+        if (result.hasErrors()) {
+            return result.getAllErrors();
+        } else {
+            User user = new User();
+            user.setUsername(headOfPracticeForm.getEmail());
+            String password = org.apache.commons.codec.digest.DigestUtils.sha256Hex(headOfPracticeForm.getPassword());
+            user.setPassword(password);
+            user.setEnabled(1);
+            UserRoles userRoles = new UserRoles();
+            userRoles.setUsername(headOfPracticeForm.getEmail());
+            userRoles.setRole("ROLE_HOP");
+            int id = userService.create(user, userRoles).getUser_role_id();
+            HeadOfPractice headOfPractice = new HeadOfPractice();
+            headOfPractice.setId(id);
+            headOfPractice.setCompanyName(headOfPracticeForm.getCompanyName());
+            headOfPractice.setFname(headOfPracticeForm.getFname());
+            headOfPractice.setLname(headOfPracticeForm.getLname());
+            headOfPractice.setImageUrl("hop_default_avatar.png");
+            return headOfPracticeService.create(headOfPractice);
+        }
+    }
+
 }
 /*
  WITHOUT LIMITING THE FOREGOING, COPYING, REPRODUCTION, REDISTRIBUTION,

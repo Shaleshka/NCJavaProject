@@ -118,7 +118,7 @@ public class StudentsController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    private Student delete(@PathVariable(value = "id") String id) {
+    public Student delete(@PathVariable(value = "id") String id) {
         try {
             return studentService.delete(Integer.parseInt(id));
         } catch (Exception e) {
