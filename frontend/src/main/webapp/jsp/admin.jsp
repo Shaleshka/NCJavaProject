@@ -21,6 +21,7 @@
 
         var facultyTable;
         var studentsTable;
+        var selected = [];
 
         function appendPractice(index, value) {
             $('#practices').append('<div class="panel box box-primary">\n' +
@@ -112,7 +113,53 @@
                 "processing": true,
                 "serverSide": true,
                 'autoWidth': false,
-                "ajax": "students/tableAllStudents"
+                "ajax": "students/tableAllStudents",
+                "rowCallback": function (row, data) {
+                    var cb = $(row).find('td:nth-child(1) > label > input[type="checkbox"]');
+                    if ($.inArray(cb.attr('id'), selected) !== -1) {
+                        cb.iCheck('check');
+                    }
+                },
+                "drawCallback": function () {
+                    $('#tstudents').find('input[type="checkbox"]').not('.selectall').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('.selectall').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('.selectall').on('ifChecked', function () {
+                        $('#tstudents').find('input[type="checkbox"]').not('.selectall').iCheck('check');
+                    });
+                    $('.selectall').on('ifUnchecked', function () {
+                        $('#tstudents').find('input[type="checkbox"]').not('.selectall').iCheck('uncheck');
+                    });
+                    $('#tstudents').find('input[type="checkbox"]').not('.selectall').on('ifChanged', function () {
+                        var id = this.id;
+                        var index = $.inArray(id, selected);
+
+                        if (index === -1) {
+                            selected.push(id);
+                        } else {
+                            selected.splice(index, 1);
+                        }
+                        if ($('#tstudents').find('input[type="checkbox"]').not('.selectall').length === $('#tstudents').find('input[type="checkbox"]:checked').not('.selectall').length) {
+                            $('.selectall').prop('checked', true).iCheck('update');
+                        }
+                        else {
+                            $('.selectall').prop('checked', false).iCheck('update');
+                        }
+                    });
+                    if ($('#tstudents').find('input[type="checkbox"]').not('.selectall').length === $('#tstudents').find('input[type="checkbox"]:checked').not('.selectall').length) {
+                        $('.selectall').prop('checked', true).iCheck('update');
+                    }
+                    else {
+                        $('.selectall').prop('checked', false).iCheck('update');
+                    }
+                }
             });
             facultyTable = $('#tfaculty').DataTable({
                 'paging': true,
@@ -329,7 +376,7 @@
                                             <table id="tstudents" class="table table-bordered table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <th></th>
+                                                    <th><input type="checkbox" class="selectall"></th>
                                                     <th>Имя</th>
                                                     <th>Фамилия</th>
                                                     <th>Факультет</th>
@@ -344,7 +391,7 @@
                                                 </tbody>
                                                 <tfoot>
                                                 <tr>
-                                                    <th></th>
+                                                    <th><input type="checkbox" class="selectall"></th>
                                                     <th>Имя</th>
                                                     <th>Фамилия</th>
                                                     <th>Факультет</th>
