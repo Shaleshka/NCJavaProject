@@ -7,6 +7,7 @@ import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -112,6 +113,17 @@ public class StudentsController {
             result.addData(converter.studentToStringArray(item, true, true, true));
         }
         return result;
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    private Student delete(@PathVariable(value = "id") String id) {
+        try {
+            return studentService.delete(Integer.parseInt(id));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

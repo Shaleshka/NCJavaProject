@@ -219,6 +219,16 @@
                 }
             });
         }
+
+        function delStudent(id) {
+            $.ajax({
+                url: "/students/delete/" + id + "?${_csrf.parameterName}=${_csrf.token}",
+                method: "get",
+                success: function () {
+                    studentsTable.draw();
+                }
+            })
+        }
     </script>
 
 </head>

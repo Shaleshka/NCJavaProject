@@ -1,6 +1,7 @@
 package com.netcracker.devschool.dev4.studdist.service;
 
 import com.netcracker.devschool.dev4.studdist.entity.Student;
+import com.netcracker.devschool.dev4.studdist.repository.AssignmentRepository;
 import com.netcracker.devschool.dev4.studdist.repository.StudentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,9 @@ public class StudentServiceImpl implements StudentService {
     @Resource
     private StudentRepository studentRepository;
 
+    @Resource
+    private AssignmentRepository assignmentRepository;
+
     @Override
     @Transactional
     public Student create(Student student) {
@@ -33,6 +37,7 @@ public class StudentServiceImpl implements StudentService {
             throw new Exception("Not found");
 
         studentRepository.delete(deletedStudent);
+        assignmentRepository.removeBySid(id);
         return deletedStudent;
     }
 

@@ -12,4 +12,8 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Integer>
     @Modifying
     void remove(@Param("id") int id, @Param("sid") int sid);
 
+    @Query("delete from Assignment a where a.studentId = :sid")
+    @Modifying
+    void removeBySid(@Param("sid") int sid);
+
 }
