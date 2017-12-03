@@ -79,7 +79,7 @@ public class StudentServiceImpl implements StudentService {
         updated.setGroup(student.getGroup());
         updated.setAvgScore(student.getAvgScore());
         updated.setIsBudget(student.getIsBudget());
-        return updated; //TODO:
+        return updated;
     }
 
     @Override

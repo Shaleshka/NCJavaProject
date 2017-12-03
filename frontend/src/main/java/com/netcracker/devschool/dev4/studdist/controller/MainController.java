@@ -297,6 +297,33 @@ public class MainController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/admin/newStudent", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public Object newStudent(@RequestParam(value = "username") String username,
+                             @RequestParam(value = "password") String password) {
+        User user = new User();
+        user.setUsername(username);
+        password = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+        user.setPassword(password);
+        user.setEnabled(1);
+        UserRoles userRoles = new UserRoles();
+        userRoles.setUsername(username);
+        userRoles.setRole("ROLE_STUDENT");
+        int id = userService.create(user, userRoles).getUser_role_id();
+        Student student = new Student();
+        student.setId(id);
+        student.setFname("");
+        student.setLname("");
+        student.setImageUrl("student_default_avatar.png");
+        student.setGroup(100000);
+        student.setAvgScore(10);
+        student.setFacultyId(1);
+        student.setSpecialityId(1);
+        studentService.create(student);
+        return id;
+    }
+
     @RequestMapping(value = "/admin/createHop", method = RequestMethod.POST)
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ADMIN')")

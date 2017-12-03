@@ -8,13 +8,13 @@ import java.util.List;
 public interface UserService {
     UserRoles create(User user, UserRoles userRoles);
 
-    User delete(long id) throws Exception;
+    User delete(int id) throws Exception;
 
     List<User> findAll();
 
     User update(User user) throws Exception;
 
-    User findById(long id);
+    User findById(int id);
 
     int getIdByName(String name);
 }

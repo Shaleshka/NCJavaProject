@@ -153,6 +153,17 @@
                     }
                 }
             });
+            $('#student_new').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        $('#new-student').modal('hide');
+                        editStudent(data)
+                    } else {
+                        alert('Error!')
+                    }
+                }
+            });
             hopsTable = $('#thops').DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -881,6 +892,49 @@
                                    data-validation-error-msg="Значение выходит за диапазон возможных оценок"
                                    type="text" class="form-control" name="avgScore"
                                    placeholder="Введите ср. балл...">
+                        </div>
+                        <input type="hidden" name="${_csrf.parameterName}"
+                               value="${_csrf.token}"/>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Закрыть
+                        </button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="new-student" data-vivaldi-spatnav-clickable="1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Редактирование студента</h4>
+            </div>
+            <div class="modal-body">
+                <form id="student_new"
+                      action="/admin/newStudent" method="post"
+                      role="form">
+                    <div class="box-body">
+                        <!-- text input -->
+                        <div class="form-group has-feedback">
+                            <input type="email" class="form-control" name="username" placeholder="Email">
+                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <input type="password" class="form-control" name="password" placeholder="Пароль">
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <input type="password" class="form-control" placeholder="Повторите пароль">
+                            <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                         </div>
                         <input type="hidden" name="${_csrf.parameterName}"
                                value="${_csrf.token}"/>

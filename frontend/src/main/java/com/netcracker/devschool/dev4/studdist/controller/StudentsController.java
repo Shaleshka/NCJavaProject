@@ -4,6 +4,7 @@ import com.netcracker.devschool.dev4.studdist.converters.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.form.StudentEdit;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
+import com.netcracker.devschool.dev4.studdist.service.UserService;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,9 @@ public class StudentsController {
     private StudentService studentService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private StudentsConverter converter;
 
     //Save the uploaded file to this folder
@@ -44,6 +48,9 @@ public class StudentsController {
             return result.getAllErrors();
         } else {
             Student updated = studentService.findById(Integer.parseInt(studentId));
+            /*User user = userService.findById(Integer.parseInt(studentId));
+            user.setUsername(student.getEmail());
+            user.setPassword(student.getPassword());*/
             updated.setFname(student.getFname());
             updated.setLname(student.getLname());
             updated.setFacultyId(student.getFaculty());
@@ -53,6 +60,11 @@ public class StudentsController {
             if (student.getIsBudget() != null) updated.setIsBudget(1);
             else updated.setIsBudget(0);
             studentService.update(updated);
+            /*try {
+                userService.update(user);
+            } catch (Exception e) {
+                return null;
+            }*/
             return updated;
         }
     }
@@ -119,6 +131,7 @@ public class StudentsController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Student delete(@PathVariable(value = "id") String id) {
         try {
+            userService.delete(Integer.parseInt(id));
             return studentService.delete(Integer.parseInt(id));
         } catch (Exception e) {
             return null;
