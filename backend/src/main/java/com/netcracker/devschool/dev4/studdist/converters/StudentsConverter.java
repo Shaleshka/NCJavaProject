@@ -1,4 +1,4 @@
-package com.netcracker.devschool.dev4.studdist.utils;
+package com.netcracker.devschool.dev4.studdist.converters;
 
 import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.service.FacultyService;

@@ -21,6 +21,7 @@
 
         var facultyTable;
         var studentsTable;
+        var hopsTable;
         var selected = [];
         var prtables = [];
 
@@ -151,6 +152,12 @@
                         $('#error').css('display', 'block');
                     }
                 }
+            });
+            hopsTable = $('#thops').DataTable({
+                "processing": true,
+                "serverSide": true,
+                'autoWidth': false,
+                "ajax": "admin/tableHop",
             });
             studentsTable = $('#tstudents').DataTable({
                 "processing": true,
@@ -398,7 +405,7 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#activity" data-toggle="tab">Практики</a></li>
-                    <li><a href="#new_hop" data-toggle="tab">Создать нового рук. практики</a></li>
+                    <li><a href="#new_hop" data-toggle="tab">Руководители практик</a></li>
                     <li><a href="#students" data-toggle="tab">Студенты</a></li>
                     <li><a href="#faculties" data-toggle="tab">Факультеты и специальности</a></li>
                     <li>
@@ -457,9 +464,34 @@
                                     </div>
 
                                 </form>
+                                <table id="thops" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Имя</th>
+                                        <th>Фамилия</th>
+                                        <th>Компания</th>
+                                        <th>Редактирование</th>
+                                        <th>Удаление</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th>Имя</th>
+                                        <th>Фамилия</th>
+                                        <th>Компания</th>
+                                        <th>Редактирование</th>
+                                        <th>Удаление</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                             <!-- /.box-body -->
                         </div>
+
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="students">

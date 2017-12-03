@@ -2,6 +2,9 @@ package com.netcracker.devschool.dev4.studdist.service;
 
 import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
 import com.netcracker.devschool.dev4.studdist.repository.HeadOfPracticeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,5 +49,11 @@ public class HeadOfPracticeServiceImpl implements HeadOfPracticeService {
     @Transactional
     public HeadOfPractice findById(int id) {
         return headOfPracticeRepository.findOne(id);
+    }
+
+    @Override
+    public Page<HeadOfPractice> findForPractice(String searchKey, String sortBy, String order, int start, int length) {
+        PageRequest pageR = new PageRequest(start / length, length, Sort.Direction.fromString(order), sortBy);
+        return headOfPracticeRepository.findForTable(searchKey, pageR);
     }
 }

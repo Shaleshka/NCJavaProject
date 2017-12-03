@@ -23,10 +23,13 @@
  */
 package com.netcracker.devschool.dev4.studdist.controller;
 
+import com.netcracker.devschool.dev4.studdist.converters.HopsConverter;
 import com.netcracker.devschool.dev4.studdist.entity.*;
 import com.netcracker.devschool.dev4.studdist.form.HeadOfPracticeForm;
 import com.netcracker.devschool.dev4.studdist.service.*;
+import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -65,6 +68,9 @@ public class MainController {
 
     @Autowired
     private SpecialityService specialityService;
+
+    @Autowired
+    private HopsConverter hopsConverter;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String registerPage() {
@@ -315,6 +321,31 @@ public class MainController {
             headOfPractice.setImageUrl("hop_default_avatar.png");
             return headOfPracticeService.create(headOfPractice);
         }
+    }
+
+    @RequestMapping(value = "/admin/tableHop", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    private TableData returnTable(
+            @RequestParam(value = "start") String start,
+            @RequestParam(value = "length") String length,
+            @RequestParam(value = "draw") String draw,
+            @RequestParam(value = "search[value]", required = false) String key,
+            @RequestParam(value = "order[0][column]") String order,
+            @RequestParam(value = "order[0][dir]") String orderDir) {
+        if (key == null) key = "";
+        TableData result = new TableData();
+        String[] columns = {"fname", "lname", "companyName", "id"};
+        int i = Integer.parseInt(order) - 1;
+        if (i < 0 || i > 2) i = 3;
+        Page<HeadOfPractice> page = headOfPracticeService.findForPractice(key, columns[i], orderDir, Integer.parseInt(start), Integer.parseInt(length));
+        List<HeadOfPractice> list = page.getContent();
+        result.setRecordsTotal((int) page.getTotalElements() - page.getNumberOfElements());
+        result.setRecordsFiltered((int) page.getTotalElements() - page.getNumberOfElements());
+        result.setDraw(Integer.parseInt(draw));
+        for (HeadOfPractice hop : list)
+            result.addData(hopsConverter.hopToStringArray(hop));
+        return result;
     }
 
 }

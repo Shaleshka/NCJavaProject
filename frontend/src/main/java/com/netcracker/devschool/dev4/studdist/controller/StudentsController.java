@@ -1,9 +1,9 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
+import com.netcracker.devschool.dev4.studdist.converters.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
 import com.netcracker.devschool.dev4.studdist.form.StudentEdit;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
-import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -109,7 +109,6 @@ public class StudentsController {
         result.setDraw(Integer.parseInt(draw));
         for (Student item: list
                 ) {
-            //passing services is temporary fix, todo: make this somehow normal
             result.addData(converter.studentToStringArray(item, true, true, true));
         }
         return result;

@@ -1,6 +1,7 @@
 package com.netcracker.devschool.dev4.studdist.controller;
 
 import com.netcracker.devschool.dev4.studdist.beans.PracticeViewModel;
+import com.netcracker.devschool.dev4.studdist.converters.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.entity.HeadOfPractice;
 import com.netcracker.devschool.dev4.studdist.entity.Practice;
 import com.netcracker.devschool.dev4.studdist.entity.Student;
@@ -8,7 +9,6 @@ import com.netcracker.devschool.dev4.studdist.service.HeadOfPracticeService;
 import com.netcracker.devschool.dev4.studdist.service.PracticeService;
 import com.netcracker.devschool.dev4.studdist.service.StudentService;
 import com.netcracker.devschool.dev4.studdist.utils.Event;
-import com.netcracker.devschool.dev4.studdist.utils.StudentsConverter;
 import com.netcracker.devschool.dev4.studdist.utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
