@@ -134,6 +134,7 @@ public class StudentsController {
             userService.delete(Integer.parseInt(id));
             return studentService.delete(Integer.parseInt(id));
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

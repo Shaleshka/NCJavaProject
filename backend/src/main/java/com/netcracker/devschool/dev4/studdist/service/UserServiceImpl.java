@@ -31,15 +31,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User delete(int id) throws Exception {
-        User deletedUser = userRepository.findOne(id);
+
+        UserRoles userRoles = userRolesRepository.findOne(id);
+
+        User deletedUser = userRepository.findByUsername(userRoles.getUsername());
 
         if (deletedUser == null)
             throw new Exception("Not found");
 
-        UserRoles userRoles = userRolesRepository.findByUsername(deletedUser.getUsername());
 
-        userRepository.delete(deletedUser);
         userRolesRepository.delete(userRoles);
+        userRepository.delete(deletedUser);
         return deletedUser;
     }
 

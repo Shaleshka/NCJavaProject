@@ -446,35 +446,19 @@
                         <div class="box box-primary">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Новый аккаунт рук. практики</h3>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-default"
+                                            data-toggle="modal" data-target="#new-hop">
+                                        Добавить рук. практики
+                                    </button>
+                                    <button id="delHopBut" type="button" class="btn btn-danger disabled">
+                                        Удалить выделенных
+                                    </button>
+                                </div>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <form id="new_hop_form" role="form">
-                                    <!-- text input -->
-                                    <div class="form-group">
-                                        <label>Электронная почта</label>
-                                        <input type="email" class="form-control"
-                                               placeholder="Введите электронную почту...">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Пароль</label>
-                                        <input type="password" class="form-control" placeholder="Введите пароль...">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Повторите пароль</label>
-                                        <input type="password" class="form-control" placeholder="Введите пароль...">
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label>Имя компании</label>
-                                        <input type="text" class="form-control" placeholder="Введите имя компании...">
-                                    </div>
-
-                                    <div class="box-footer">
-                                        <button type="submit" class="btn btn-primary">Создать</button>
-                                    </div>
-
-                                </form>
                                 <table id="thops" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
@@ -903,6 +887,60 @@
                         </button>
                         <button type="submit" class="btn btn-primary">Сохранить</button>
                     </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="new-hop" data-vivaldi-spatnav-clickable="1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Создать руководителя практики</h4>
+            </div>
+            <div class="modal-body">
+                <div id="hop_success" class="alert alert-success alert-dismissible" style="display: none">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Изменения приняты!</h4>
+                </div>
+
+                <div id="hop_error" class="alert alert-danger alert-dismissible" style="display: none">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-ban"></i> Ошибка!</h4>
+                </div>
+                <form id="new_hop_form" role="form">
+                    <div class="box-body">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label>Электронная почта</label>
+                            <input type="email" class="form-control"
+                                   placeholder="Введите электронную почту...">
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" class="form-control" placeholder="Введите пароль...">
+                        </div>
+                        <div class="form-group">
+                            <label>Повторите пароль</label>
+                            <input type="password" class="form-control" placeholder="Введите пароль...">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Имя компании</label>
+                            <input type="text" class="form-control" placeholder="Введите имя компании...">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Закрыть
+                        </button>
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                    </div>
+
                 </form>
             </div>
         </div>
