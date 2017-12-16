@@ -207,6 +207,12 @@
                         } else {
                             selected.splice(index, 1);
                         }
+                        if (selected.length > 0) {
+                            $('#delBut').attr('class', 'btn btn-danger');
+                        }
+                        else {
+                            $('#delBut').attr('class', 'btn btn-danger disabled');
+                        }
                         if ($('#tstudents').find('input[type="checkbox"]').not('.selectall').length === $('#tstudents').find('input[type="checkbox"]:checked').not('.selectall').length) {
                             $('.selectall').prop('checked', true).iCheck('update');
                         }
@@ -404,6 +410,22 @@
                 }
             })
         }
+
+        function delstudents() {
+            $.ajax({
+                url: 'students/deleteFew' + "?${_csrf.parameterName}=${_csrf.token}",
+                method: 'post',
+                data: {
+                    "students[]": selected
+                },
+                success: function (data) {
+                    studentsTable.draw();
+                    selected = [];
+                    $('#delBut').attr('class', 'btn btn-danger disabled');
+                }
+            })
+        }
+
     </script>
 
 </head>
@@ -498,7 +520,8 @@
                                             data-toggle="modal" data-target="#new-student">
                                         Добавить студента
                                     </button>
-                                    <button id="delBut" type="button" class="btn btn-danger disabled">
+                                    <button id="delBut" onclick="delstudents()" type="button"
+                                            class="btn btn-danger disabled">
                                         Удалить выделенных
                                     </button>
                                 </div>

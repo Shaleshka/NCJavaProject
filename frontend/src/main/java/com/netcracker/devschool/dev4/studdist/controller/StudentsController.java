@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -137,6 +138,25 @@ public class StudentsController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @RequestMapping(value = "/deleteFew", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<Student> deleteFew(
+            @RequestParam(value = "students[]") String[] students) {
+        List<Student> result = new ArrayList<>();
+        for (String item : students) {
+            int sid = Integer.parseInt(item.substring(2));
+            try {
+                userService.delete(sid);
+                result.add(studentService.delete(sid));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return result;
     }
 
 }
