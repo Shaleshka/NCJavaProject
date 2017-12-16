@@ -20,6 +20,7 @@
     <script>
 
         var facultyTable;
+        var specialityTable;
         var studentsTable;
         var hopsTable;
         var selected = [];
@@ -236,7 +237,7 @@
                 'info': true,
                 'autoWidth': false
             });
-            $('#tspecialities').DataTable({
+            specialityTable = $('#tspecialities').DataTable({
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,
@@ -270,7 +271,9 @@
                 success: function (data) {
                     if (data) {
                         facultyTable.rows('#ftr' + data.id).remove().draw();
-                        //todo: delete specialities from table
+                        $.each($('#tspecialities').find('tr'), function (id, value) {
+                            if ($(value).find('td:nth-child(2)').text() === data.name) this.remove();
+                        })
                     }
                 }
             })
@@ -422,6 +425,21 @@
                     studentsTable.draw();
                     selected = [];
                     $('#delBut').attr('class', 'btn btn-danger disabled');
+                }
+            })
+        }
+
+        function delSpeciality(id) {
+            $.ajax({
+                url: '/university/delSpeciality?${_csrf.parameterName}=${_csrf.token}',
+                method: 'post',
+                data: {
+                    'id': id
+                },
+                success: function (data) {
+                    if (data) {
+                        specialityTable.rows('#str' + data.id).remove().draw();
+                    }
                 }
             })
         }
@@ -660,7 +678,7 @@
                                                         </thead>
                                                         <tbody>
                                                         <c:forEach items="${specialities}" var="item">
-                                                            <tr>
+                                                            <tr id="str${item.getId()}">
                                                                 <td>${item.getName()}</td>
                                                                 <td>${faculties.stream().filter(faculty -> faculty.getId()==item.getFacultyId()).findFirst().get().getName()}</td>
                                                                 <td>

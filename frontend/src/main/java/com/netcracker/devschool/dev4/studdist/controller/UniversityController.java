@@ -66,4 +66,15 @@ public class UniversityController {
         }
     }
 
+    @RequestMapping(value = "/delSpeciality", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public Speciality delSpeciality(@RequestParam(value = "id") String id) {
+        try {
+            return specialityService.delete(Integer.parseInt(id));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
