@@ -139,7 +139,7 @@
                     });
                 }
             });
-            $('#faculties').on('change', function () {
+            $('#f_faculties').on('change', function () {
                 refreshSpecialities(this.value, 0);
             });
             refreshSpecialities(1, 0);
@@ -249,13 +249,30 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data) {
-                        facultyTable.row.add([
+                        f = facultyTable.row.add([
                             data.name,
                             '<button onclick="delFaculty(' + data.id + ')" type="button" class="btn btn-block btn-danger">\n' +
                             '                                                                        Удалить\n' +
                             '                                                                    </button>'
-                        ]).draw(false);
+                        ]).draw(false).node();
+                        $(f).attr('id', 'ftr' + data.id);
                         $('#new-faculty').modal('hide');
+                    }
+                }
+            });
+            $('#addSpecForm').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        f = specialityTable.row.add([
+                            data.name,
+                            $('#faculty_sel option[value="' + data.facultyId + '"]').text(),
+                            '<button onclick="delSpeciality(' + data.id + ')" type="button" class="btn btn-block btn-danger">\n' +
+                            '                                                                        Удалить\n' +
+                            '                                                                    </button>'
+                        ]).draw(false).node();
+                        $(f).attr('id', 'str' + data.id);
+                        $('#new-speciality').modal('hide');
                     }
                 }
             });
@@ -444,6 +461,25 @@
             })
         }
 
+        function addSpeciality() {
+            $.ajax({
+                url: 'university/getAllFaculties/',
+                dataType: 'json',
+                success: function (data) {
+                    $('#faculty_sel').find('option').remove();
+                    var options = "";
+                    $.each(data, function (index, value) {
+                        options += '<option value="' + value.id + '">' + value.name + '</option>';
+                    });
+                    $('#faculty_sel').html(options);
+                    if (val) {
+                        $('#specs').val(1);
+                    }
+                }
+            });
+            $('#new-speciality').modal("show");
+        }
+
     </script>
 
 </head>
@@ -604,7 +640,7 @@
                                         Создать факультет
                                     </button>
                                     <button type="button" class="btn btn-default"
-                                            data-toggle="modal" data-target="#new-speciality">
+                                            onclick="addSpeciality()">
                                         Создать специальность
                                     </button>
                                 </div>
@@ -788,28 +824,30 @@
                         <span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">Новая специальность</h4>
                 </div>
-                <div class="modal-body">
-                    <form role="form">
+                <form role="form" id="addSpecForm"
+                      action="/university/addSpeciality?${_csrf.parameterName}=${_csrf.token}" method="post">
+                    <div class="modal-body">
+
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Имя</label>
-                                <input type="text" class="form-control" placeholder="Введите имя специальности...">
+                                <input type="text" name="name" class="form-control"
+                                       placeholder="Введите имя специальности...">
                             </div>
                             <div class="form-group">
-                                <label for="faculty">Факультет</label>
-                                <select id="faculty" class="form-control">
-                                    <option>ФКП</option>
-                                    <option>КСИС</option>
-                                    <option>ФРЭ</option>
+                                <label for="faculty_sel">Факультет</label>
+                                <select id="faculty_sel" name="faculty" class="form-control">
+
                                 </select>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Создать</button>
-                </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                    </div>
+                </form>
             </div>
             <!-- /.modal-content -->
         </div>

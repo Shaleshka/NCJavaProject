@@ -1,6 +1,7 @@
 package com.netcracker.devschool.dev4.studdist.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -8,6 +9,7 @@ import javax.persistence.Table;
 @Table(name = "faculties")
 public class Faculty {
     @Id
+    @GeneratedValue
     private int id;
     private String name;
 

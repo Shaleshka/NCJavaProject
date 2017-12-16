@@ -54,6 +54,21 @@ public class UniversityController {
         return null;
     }
 
+    @RequestMapping(value = "/addSpeciality", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public Speciality addSpecaility(
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "faculty") String fid) {
+        if (name.length() > 1 && name.length() < 46 && facultyService.findById(Integer.parseInt(fid)) != null) {
+            Speciality speciality = new Speciality();
+            speciality.setName(name);
+            speciality.setFacultyId(Integer.parseInt(fid));
+            return specialityService.create(speciality);
+        }
+        return null;
+    }
+
     @RequestMapping(value = "/delFaculty", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
