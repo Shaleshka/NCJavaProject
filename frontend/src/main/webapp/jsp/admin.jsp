@@ -24,6 +24,7 @@
         var studentsTable;
         var hopsTable;
         var selected = [];
+        var hops_selected = [];
         var prtables = [];
 
         var prselected = [];
@@ -170,6 +171,58 @@
                 "serverSide": true,
                 'autoWidth': false,
                 "ajax": "admin/tableHop",
+                "rowCallback": function (row, data) {
+                    var cb = $(row).find('td:nth-child(1) > label > input[type="checkbox"]');
+                    if ($.inArray(cb.attr('id'), hops_selected) !== -1) {
+                        cb.iCheck('check');
+                    }
+                },
+                "drawCallback": function () {
+                    $('#thops').find('input[type="checkbox"]').not('.selectall').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('.selectall').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('.selectall').on('ifChecked', function () {
+                        $('#thops').find('input[type="checkbox"]').not('.selectall').iCheck('check');
+                    });
+                    $('.selectall').on('ifUnchecked', function () {
+                        $('#thops').find('input[type="checkbox"]').not('.selectall').iCheck('uncheck');
+                    });
+                    $('#thops').find('input[type="checkbox"]').not('.selectall').on('ifChanged', function () {
+                        var id = this.id;
+                        var index = $.inArray(id, hops_selected);
+
+                        if (index === -1) {
+                            hops_selected.push(id);
+                        } else {
+                            hops_selected.splice(index, 1);
+                        }
+                        if (hops_selected.length > 0) {
+                            $('#delHopBut').attr('class', 'btn btn-danger');
+                        }
+                        else {
+                            $('#delHopBut').attr('class', 'btn btn-danger disabled');
+                        }
+                        if ($('#thops').find('input[type="checkbox"]').not('.selectall').length === $('#thops').find('input[type="checkbox"]:checked').not('.selectall').length) {
+                            $('.selectall').prop('checked', true).iCheck('update');
+                        }
+                        else {
+                            $('.selectall').prop('checked', false).iCheck('update');
+                        }
+                    });
+                    if ($('#thops').find('input[type="checkbox"]').not('.selectall').length === $('#thops').find('input[type="checkbox"]:checked').not('.selectall').length) {
+                        $('.selectall').prop('checked', true).iCheck('update');
+                    }
+                    else {
+                        $('.selectall').prop('checked', false).iCheck('update');
+                    }
+                }
             });
             studentsTable = $('#tstudents').DataTable({
                 "processing": true,
